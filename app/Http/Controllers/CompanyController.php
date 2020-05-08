@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Calendar;
 use App\Company;
+use App\Reservation;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -18,4 +20,17 @@ class CompanyController extends Controller
 
         return view('company.index', compact('companies'));
     }
+
+
+    public function welcome()
+    {
+        $companies = Company::has('calendars')->with('currentYear')->get();
+
+        return view('welcome',compact('companies'));
+    }
+
+
+
+
+
 }

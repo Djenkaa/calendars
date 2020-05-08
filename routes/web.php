@@ -13,11 +13,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/', 'CompanyController@welcome')->name('company.welcome');
+
+Route::prefix('company')->group(function () {
+
+
+    Route::get('/admin','CompanyController@index')->name('company.index');
+
+
+
 });
 
 
-Route::get('/admin','CompanyController@index')->name('company.index');
+
+Route::prefix('calendar')->group(function () {
+
+    Route::post('/store', 'CalendarController@store')->name('calendar.store');
+    Route::get('/show/{calendar}', 'CalendarController@show')->name('calendar.show');
+    Route::post('/reserve','CalendarController@reserve')->name('calendar.reserve');
+
+});
 
 

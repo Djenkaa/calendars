@@ -33,8 +33,16 @@
                 </select>
             </div>
 
+            {{--       MORE OPTIONS     --}}
+            <p class="showOption">Dodatne opcije</p>
+
+            <div class="mb-4 moreOptions" style="display: none;">
+                <input type="text" placeholder="last minute price" v-model="lastMinute">
+                <input type="text" placeholder="special offer price" v-model="specialOffer">
+            </div>
+
             <button @click="generateCalendar" class="btn btn-primary">Generate Calendar</button>
-            <button class="btn btn-success">Save</button>
+            <button @click="save" class="btn btn-success">Save</button>
 
             {{--       CALENDAR     --}}
 
@@ -50,7 +58,8 @@
                     <span class="jzdb" v-for="n in firstDay">
         <!--BLANK--></span>
 
-                    <span class="day" v-for="days in daysInMonth" @click="modify(days.field)" :style="{background:days.type.background}">@{{days.field}}</span>
+                    <span class="day" v-for="days in daysInMonth" @click="modify(days.field)"
+                          :style="{background:days.type.background}">@{{days.field}}</span>
 
 
                 </div>
@@ -68,3 +77,15 @@
     </admin>
 
 @endsection
+
+@section('myJs')
+
+    <script>
+
+        $('.showOption').click(function () {
+           $('.moreOptions').toggle();
+        });
+
+    </script>
+
+    @endsection

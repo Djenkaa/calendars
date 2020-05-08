@@ -1,38 +1,40 @@
 <template>
-    
+
 </template>
 
 <script>
     export default {
         name: "Admin",
 
-        data(){
-            return{
+        data() {
+            return {
                 daysInWeek: ['Ne', 'Po', 'Ut', 'Sr', 'Ce', 'Pe', 'Su'],
                 months: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec'],
-                selectCompany:2,
+                selectCompany: 2,
                 selectYear: new Date().getFullYear(),
                 selectMonth: new Date().getMonth(),
-                showCalendar:false,
-                daysInMonth:[],
-                firstDay:0,
-                calendarMonth:'',
-                selectAction:'',
-                actions:[
+                lastMinute: 0,
+                specialOffer: 0,
+                showCalendar: false,
+                daysInMonth: [],
+                firstDay: 0,
+                calendarMonth: '',
+                selectAction: '',
+                actions: [
                     {
-                        type:'free',
-                        background:''
+                        type: 'free',
+                        background: ''
                     },
                     {
-                        type:'busy',
-                        background:'red'
+                        type: 'busy',
+                        background: 'red'
                     },
                     {
-                        type:'special',
-                        background:'blue'
+                        type: 'special',
+                        background: 'blue'
                     }, {
-                        type:'last',
-                        background:'yellow'
+                        type: 'last',
+                        background: 'yellow'
                     },
                 ]
 
@@ -40,25 +42,26 @@
             }
         },
 
-        methods:{
-            generateCalendar(){
+        methods: {
+            generateCalendar() {
 
-               var days = 32-(new Date(this.selectYear, this.selectMonth, 32).getDate());
+                var days = 32 - (new Date(this.selectYear, this.selectMonth, 32).getDate());
                 var firstDay = new Date(this.selectYear, this.selectMonth).getDay();
 
-                for(var i = 1; i<=days; i++){
+                this.daysInMonth = [];
+                for (var i = 1; i <= days; i++) {
 
                     let date = {
                         field: i,
-                        type:{
-                            'status':'free',
-                            'background':''
+                        type: {
+                            'status': 'free',
+                            'background': ''
                         }
                     };
                     this.daysInMonth.push(date);
                 }
 
-                if(days){
+                if (days) {
                     // this.daysInMonth = days;
                     this.calendarMonth = this.months[this.selectMonth];
                     this.showCalendar = true;
@@ -67,29 +70,45 @@
                 }
 
             },
-            modify(field){
+            modify(field) {
 
-                if(!this.selectAction){
+                if (!this.selectAction) {
                     console.log('moras izabrati neku akciju!');
                     return;
                 }
 
-                var search = this.actions.find(el=>{
+                var search = this.actions.find(el => {
                     return el.type == this.selectAction;
                 });
 
 
-                if(search){
-                    var searchField = this.daysInMonth.find(el=>{
-                       return el.field == field;
+                if (search) {
+                    var searchField = this.daysInMonth.find(el => {
+                        return el.field == field;
                     });
-                    console.log(searchField);
+
 
                     searchField.type.status = search.type;
                     searchField.type.background = search.background;
                 }
 
 
+            },
+            save() {
+
+                axios.post('/calendar/store', {
+                    year: this.selectYear,
+                    month: this.selectMonth,
+                    dates: this.daysInMonth,
+                    firstDay:this.firstDay,
+                    companyId: this.selectCompany
+                })
+                    .then(data => {
+                        location.reload();
+
+                    }).catch(e => {
+                    console.log(e);
+                });
             }
         }
     }
@@ -175,12 +194,13 @@
         max-width: 150px;
     }
 
-    .jzdbox .day{
-        border: 1px solid rgba(255,255,255, 0.6);
+    .jzdbox .day {
+        border: 1px solid rgba(255, 255, 255, 0.6);
         cursor: pointer;
     }
-    .jzdbox .day:hover{
-        background: rgba(255,255,255, 0.6);
+
+    .jzdbox .day:hover {
+        background: rgba(255, 255, 255, 0.6);
         color: black;
     }
 

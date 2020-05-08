@@ -3,7 +3,9 @@
 
 @section('content')
 
-        <example-component></example-component>
+        <example-component
+                companies="{{$companies}}"
+        ></example-component>
 
     @endsection
 

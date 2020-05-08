@@ -15,11 +15,11 @@ class CompaniesTableSeeder extends Seeder
         $companies = [
             [
                 'name'=>'Facebook',
-                'image'=>'https://miro.medium.com/max/900/1*2c4oE4vKaS4nlcDQ52UGqg.png'
+                'image'=>'https://cdn3.iconfinder.com/data/icons/capsocial-round/500/facebook-512.png'
             ],
             [
                 'name'=>'Google',
-                'image'=>'https://www.impossible.sg/wp-content/uploads/2013/12/google-hummingbird-explained.jpg'
+                'image'=>'https://www.pngitem.com/pimgs/m/33-330202_google-logo-hd-png-download.png'
             ]
         ];
 
