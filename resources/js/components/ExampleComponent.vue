@@ -25,10 +25,10 @@
                             <span class="jzdb" v-for="blank in calendar.firstDay">
                 <!--BLANK--></span>
 
-                            <span class="day" v-for="date in JSON.parse(calendar.dates)"
-                                  :style="{background: date.type.background}"
+                            <span class="day" v-for="(date,index) in JSON.parse(calendar.dates)"
+                                :style="{background: paintField(index + 1, JSON.parse(calendar.dates))}"
                             >
-                                    {{date.field}}
+                             {{date.field}}
                                 </span>
 
 
@@ -196,6 +196,26 @@
                     }).catch(e => {
                     console.log(e);
                 });
+            },
+
+            paintField(index, fields){
+
+              var field = fields.find(el=>{
+                  return  el.field == index;
+              });
+              console.log(field);
+
+              var nextField = fields.find(el=>{
+                 return el.field == index +1;
+              });
+
+              if(nextField){
+                  if(field.type.background != nextField.type.background){
+                      return  'linear-gradient(to right bottom, '+field.type.background+' 50%, '+nextField.type.background+' 50%)';
+
+                  }
+              }
+                  return field.type.background;
             }
 
         },

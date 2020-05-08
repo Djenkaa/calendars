@@ -2191,6 +2191,23 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (e) {
         console.log(e);
       });
+    },
+    paintField: function paintField(index, fields) {
+      var field = fields.find(function (el) {
+        return el.field == index;
+      });
+      console.log(field);
+      var nextField = fields.find(function (el) {
+        return el.field == index + 1;
+      });
+
+      if (nextField) {
+        if (field.type.background != nextField.type.background) {
+          return 'linear-gradient(to right bottom, ' + field.type.background + ' 50%, ' + nextField.type.background + ' 50%)';
+        }
+      }
+
+      return field.type.background;
     }
   },
   mounted: function mounted() {}
@@ -39240,16 +39257,21 @@ var render = function() {
                         return _c("span", { staticClass: "jzdb" })
                       }),
                       _vm._v(" "),
-                      _vm._l(JSON.parse(calendar.dates), function(date) {
+                      _vm._l(JSON.parse(calendar.dates), function(date, index) {
                         return _c(
                           "span",
                           {
                             staticClass: "day",
-                            style: { background: date.type.background }
+                            style: {
+                              background: _vm.paintField(
+                                index + 1,
+                                JSON.parse(calendar.dates)
+                              )
+                            }
                           },
                           [
                             _vm._v(
-                              "\n                                " +
+                              "\n                         " +
                                 _vm._s(date.field) +
                                 "\n                            "
                             )
