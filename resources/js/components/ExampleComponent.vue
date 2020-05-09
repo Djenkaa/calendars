@@ -26,7 +26,7 @@
                 <!--BLANK--></span>
 
                             <span class="day" v-for="(date,index) in JSON.parse(calendar.dates)"
-                                :style="{background: paintField(index + 1, JSON.parse(calendar.dates))}"
+                                  :style="{background: paintField(index + 1, JSON.parse(calendar.dates))}"
                             >
                              {{date.field}}
                                 </span>
@@ -73,8 +73,8 @@
                         <span class="jzdb" v-for="n in cal.firstDay">
                 <!--BLANK--></span>
 
-                        <span class="day" v-for="date in dates" @click="reserve(date.field)"
-                              :style="{background: date.type.background}">
+                        <span class="day" v-for="(date, index) in dates" @click="reserve(date.field)"
+                              :style="{background: paintField(index + 1, dates)}">
                             {{date.field}}
                         </span>
 
@@ -110,7 +110,8 @@
                     userDates: [],
                     fullName: '',
                     phone: '',
-                }
+                },
+
             }
         },
 
@@ -145,22 +146,17 @@
                         this.dates[i].type.background = '#FF8A75';
                     }
                 }
-                if (field != this.dates.length) {
 
-                    var possibleField = this.dates.find(el => {
-                        return el.field == count + 1;
-                    });
+                var possibleField = this.dates.find(el => {
+                    return el.field == count + 1;
+                });
 
-                    while (possibleField.type.status == 'busy') {
-                        count++;
-
-                        possibleField = this.dates.find(el => {
-                            return el.field == count + 1;
-                        });
-                    }
-                    possibleField.type.status = 'free';
-                    possibleField.type.background = '';
+                if (possibleField.type.status == 'busy') {
+                    return;
                 }
+
+                possibleField.type.status = 'free';
+                possibleField.type.background = 'rgba(255,255,255, 0.3)';
             },
 
             reserve(field) {
@@ -198,25 +194,22 @@
                 });
             },
 
-            paintField(index, fields){
+            paintField(index, fields) {
 
-              var field = fields.find(el=>{
-                  return  el.field == index;
-              });
-              console.log(field);
+                var field = fields.find(el => {
+                    return el.field == index;
+                });
 
-              var nextField = fields.find(el=>{
-                 return el.field == index +1;
-              });
+                var lastField = fields.find(el => {
+                    return el.field == index - 1;
+                });
 
-              if(nextField){
-                  if(field.type.background != nextField.type.background){
-                      return  'linear-gradient(to right bottom, '+field.type.background+' 50%, '+nextField.type.background+' 50%)';
-
-                  }
-              }
-                  return field.type.background;
+                if (lastField) {
+                        return 'linear-gradient(to right bottom, ' + lastField.type.background + ' 50%, ' + field.type.background + ' 50%)';
+                }
+                return field.type.background;
             }
+
 
         },
 
@@ -287,6 +280,7 @@
         float: left;
         overflow: hidden;
         line-height: 40px;
+
     }
 
     .jzdcal .jzdb:before {
@@ -318,6 +312,7 @@
 
     .jzdbox .day {
         cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.6);
     }
 
     .typeOfField {

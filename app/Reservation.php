@@ -22,7 +22,7 @@ class Reservation extends Model
             if(in_array($value['field'], $dates)){
 
                 $calendarDates[$key]['type']['status'] = 'busy';
-                $calendarDates[$key]['type']['background'] = 'red';
+                $calendarDates[$key]['type']['background'] = 'rgba(255, 71, 71,0.4)';
             }
         }
         $calendar['dates'] = json_encode($calendarDates);

@@ -1930,16 +1930,16 @@ __webpack_require__.r(__webpack_exports__);
       selectAction: '',
       actions: [{
         type: 'free',
-        background: ''
+        background: 'rgba(71, 255, 105, 0.4)'
       }, {
         type: 'busy',
-        background: 'red'
+        background: 'rgba(255, 71, 71,0.4)'
       }, {
         type: 'special',
-        background: 'blue'
+        background: 'rgba(71, 227, 255, 0.4)'
       }, {
         type: 'last',
-        background: 'yellow'
+        background: 'rgba(255, 224, 71, 0.4)'
       }]
     };
   },
@@ -1954,7 +1954,7 @@ __webpack_require__.r(__webpack_exports__);
           field: i,
           type: {
             'status': 'free',
-            'background': ''
+            'background': 'rgba(71, 255, 105,0.4)'
           }
         };
         this.daysInMonth.push(date);
@@ -1978,14 +1978,11 @@ __webpack_require__.r(__webpack_exports__);
       var search = this.actions.find(function (el) {
         return el.type == _this.selectAction;
       });
-
-      if (search) {
-        var searchField = this.daysInMonth.find(function (el) {
-          return el.field == field;
-        });
-        searchField.type.status = search.type;
-        searchField.type.background = search.background;
-      }
+      var searchField = this.daysInMonth.find(function (el) {
+        return el.field == field;
+      });
+      searchField.type.status = search.type;
+      searchField.type.background = search.background;
     },
     save: function save() {
       axios.post('/calendar/store', {
@@ -2150,21 +2147,16 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
-      if (field != this.dates.length) {
-        var possibleField = this.dates.find(function (el) {
-          return el.field == count + 1;
-        });
+      var possibleField = this.dates.find(function (el) {
+        return el.field == count + 1;
+      });
 
-        while (possibleField.type.status == 'busy') {
-          count++;
-          possibleField = this.dates.find(function (el) {
-            return el.field == count + 1;
-          });
-        }
-
-        possibleField.type.status = 'free';
-        possibleField.type.background = '';
+      if (possibleField.type.status == 'busy') {
+        return;
       }
+
+      possibleField.type.status = 'free';
+      possibleField.type.background = 'rgba(255,255,255, 0.3)';
     },
     reserve: function reserve(field) {
       var searchDate = this.dates.find(function (el) {
@@ -2196,15 +2188,12 @@ __webpack_require__.r(__webpack_exports__);
       var field = fields.find(function (el) {
         return el.field == index;
       });
-      console.log(field);
-      var nextField = fields.find(function (el) {
-        return el.field == index + 1;
+      var lastField = fields.find(function (el) {
+        return el.field == index - 1;
       });
 
-      if (nextField) {
-        if (field.type.background != nextField.type.background) {
-          return 'linear-gradient(to right bottom, ' + field.type.background + ' 50%, ' + nextField.type.background + ' 50%)';
-        }
+      if (lastField) {
+        return 'linear-gradient(to right bottom, ' + lastField.type.background + ' 50%, ' + field.type.background + ' 50%)';
       }
 
       return field.type.background;
@@ -6777,7 +6766,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Fjalla+One:400|Roboto:400,400italic,700);", ""]);
 
 // module
-exports.push([module.i, "\nbody[data-v-299e239e] {\n    background-color: #282423;\n}\n.card[data-v-299e239e] {\n    background: white;\n    border: 1px solid #eee;\n    box-shadow: 0px 0px 10px #ccc;\n    padding: 10px;\n}\n.jzdbox[data-v-299e239e] {\n    width: 315px;\n    background: #332f2e;\n    border-radius: 5px;\n    overflow: hidden;\n    display: block;\n    margin-bottom: 10px;\n    box-shadow: 0 0 10px #201d1c;\n    margin: 0 auto;\n    margin-top: 20px;\n}\n.jzdcal[data-v-299e239e] {\n    padding: 0 10px 10px 10px;\n    box-sizing: border-box !important;\n    background: #749d9e;\n    background: linear-gradient(#749d9e, #b3a68b) !important;\n}\n.jzdcalt[data-v-299e239e] {\n    font: 18px 'Roboto';\n    font-weight: 700;\n    color: #f7f3eb;\n    display: block;\n    margin: 18px 0 0 0;\n    text-transform: uppercase;\n    text-align: center;\n    letter-spacing: 1px;\n}\n.jzdcal span[data-v-299e239e] {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    color: #f7f3eb;\n    text-align: center;\n    width: 42px;\n    height: 42px;\n    display: inline-block;\n    float: left;\n    overflow: hidden;\n    line-height: 40px;\n}\n.jzdcal .jzdb[data-v-299e239e]:before {\n    opacity: 0.3;\n    content: 'o';\n}\n.circle[data-v-299e239e] {\n    border: 1px solid #f7f3eb;\n    box-sizing: border-box !important;\n    border-radius: 200px !important;\n}\nspan[data-title][data-v-299e239e]:hover:after,\ndiv[data-title][data-v-299e239e]:hover:after {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    content: attr(data-title);\n    position: absolute;\n    margin: 0 0 100px;\n    background: #282423;\n    border: 1px solid #f7f3eb;\n    color: #f7f3eb;\n    padding: 5px;\n    z-index: 9999;\n    min-width: 150px;\n    max-width: 150px;\n}\n.jzdbox .day[data-v-299e239e] {\n    cursor: pointer;\n}\n.typeOfField[data-v-299e239e] {\n    margin-left: 20px;\n}\n.fieldColor[data-v-299e239e] {\n    display: inline-block;\n    width: 20px;\n    height: 20px;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-299e239e] {\n    background-color: #282423;\n}\n.card[data-v-299e239e] {\n    background: white;\n    border: 1px solid #eee;\n    box-shadow: 0px 0px 10px #ccc;\n    padding: 10px;\n}\n.jzdbox[data-v-299e239e] {\n    width: 315px;\n    background: #332f2e;\n    border-radius: 5px;\n    overflow: hidden;\n    display: block;\n    margin-bottom: 10px;\n    box-shadow: 0 0 10px #201d1c;\n    margin: 0 auto;\n    margin-top: 20px;\n}\n.jzdcal[data-v-299e239e] {\n    padding: 0 10px 10px 10px;\n    box-sizing: border-box !important;\n    background: #749d9e;\n    background: linear-gradient(#749d9e, #b3a68b) !important;\n}\n.jzdcalt[data-v-299e239e] {\n    font: 18px 'Roboto';\n    font-weight: 700;\n    color: #f7f3eb;\n    display: block;\n    margin: 18px 0 0 0;\n    text-transform: uppercase;\n    text-align: center;\n    letter-spacing: 1px;\n}\n.jzdcal span[data-v-299e239e] {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    color: #f7f3eb;\n    text-align: center;\n    width: 42px;\n    height: 42px;\n    display: inline-block;\n    float: left;\n    overflow: hidden;\n    line-height: 40px;\n}\n.jzdcal .jzdb[data-v-299e239e]:before {\n    opacity: 0.3;\n    content: 'o';\n}\n.circle[data-v-299e239e] {\n    border: 1px solid #f7f3eb;\n    box-sizing: border-box !important;\n    border-radius: 200px !important;\n}\nspan[data-title][data-v-299e239e]:hover:after,\ndiv[data-title][data-v-299e239e]:hover:after {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    content: attr(data-title);\n    position: absolute;\n    margin: 0 0 100px;\n    background: #282423;\n    border: 1px solid #f7f3eb;\n    color: #f7f3eb;\n    padding: 5px;\n    z-index: 9999;\n    min-width: 150px;\n    max-width: 150px;\n}\n.jzdbox .day[data-v-299e239e] {\n    cursor: pointer;\n    border: 1px solid rgba(255, 255, 255, 0.6);\n}\n.typeOfField[data-v-299e239e] {\n    margin-left: 20px;\n}\n.fieldColor[data-v-299e239e] {\n    display: inline-block;\n    width: 20px;\n    height: 20px;\n}\n\n", ""]);
 
 // exports
 
@@ -39336,12 +39325,14 @@ var render = function() {
                       return _c("span", { staticClass: "jzdb" })
                     }),
                     _vm._v(" "),
-                    _vm._l(_vm.dates, function(date) {
+                    _vm._l(_vm.dates, function(date, index) {
                       return _c(
                         "span",
                         {
                           staticClass: "day",
-                          style: { background: date.type.background },
+                          style: {
+                            background: _vm.paintField(index + 1, _vm.dates)
+                          },
                           on: {
                             click: function($event) {
                               return _vm.reserve(date.field)

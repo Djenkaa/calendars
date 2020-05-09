@@ -23,18 +23,18 @@
                 actions: [
                     {
                         type: 'free',
-                        background: ''
+                        background: 'rgba(71, 255, 105, 0.4)'
                     },
                     {
                         type: 'busy',
-                        background: 'red'
+                        background: 'rgba(255, 71, 71,0.4)'
                     },
                     {
                         type: 'special',
-                        background: 'blue'
+                        background: 'rgba(71, 227, 255, 0.4)'
                     }, {
                         type: 'last',
-                        background: 'yellow'
+                        background: 'rgba(255, 224, 71, 0.4)'
                     },
                 ]
 
@@ -55,7 +55,7 @@
                         field: i,
                         type: {
                             'status': 'free',
-                            'background': ''
+                            'background': 'rgba(71, 255, 105,0.4)'
                         }
                     };
                     this.daysInMonth.push(date);
@@ -82,17 +82,14 @@
                 });
 
 
-                if (search) {
-                    var searchField = this.daysInMonth.find(el => {
-                        return el.field == field;
-                    });
+
+                var searchField = this.daysInMonth.find(el => {
+                    return el.field == field;
+                });
 
 
-                    searchField.type.status = search.type;
-                    searchField.type.background = search.background;
-                }
-
-
+                searchField.type.status = search.type;
+                searchField.type.background = search.background;
             },
             save() {
 
@@ -100,7 +97,7 @@
                     year: this.selectYear,
                     month: this.selectMonth,
                     dates: this.daysInMonth,
-                    firstDay:this.firstDay,
+                    firstDay: this.firstDay,
                     companyId: this.selectCompany
                 })
                     .then(data => {
