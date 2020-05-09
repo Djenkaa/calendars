@@ -58,4 +58,19 @@ class CalendarController extends Controller
 
        return response()->json('success');
     }
+
+
+    public function price(Request $request)
+    {
+        $calendar = Calendar::find($request->calendarId);
+        $period = $calendar->makePeriod($request->dates);
+
+        $price = Reservation::price($request->dates, $request->calendarId);
+
+        $result = [
+            'period'=>$period,
+            'price'=>$price
+        ];
+        return $result;
+    }
 }

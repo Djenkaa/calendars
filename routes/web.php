@@ -33,6 +33,8 @@ Route::prefix('calendar')->group(function () {
     Route::get('/show/{calendar}', 'CalendarController@show')->name('calendar.show');
     Route::post('/reserve','CalendarController@reserve')->name('calendar.reserve');
 
+    Route::post('/price', 'CalendarController@price')->name('calendar.price');
+
 });
 
 

@@ -15,6 +15,7 @@
                 selectMonth: new Date().getMonth(),
                 lastMinute: 0,
                 specialOffer: 0,
+                freePrice:0,
                 showCalendar: false,
                 daysInMonth: [],
                 firstDay: 0,
@@ -26,13 +27,14 @@
                         background: 'rgba(71, 255, 105, 0.4)'
                     },
                     {
-                        type: 'busy',
+                        type: 'reserved',
                         background: 'rgba(255, 71, 71,0.4)'
                     },
                     {
                         type: 'special',
                         background: 'rgba(71, 227, 255, 0.4)'
-                    }, {
+                    },
+                    {
                         type: 'last',
                         background: 'rgba(255, 224, 71, 0.4)'
                     },
@@ -54,8 +56,10 @@
                     let date = {
                         field: i,
                         type: {
-                            'status': 'free',
-                            'background': 'rgba(71, 255, 105,0.4)'
+                            status: 'free',
+                            background: 'rgba(71, 255, 105,0.4)',
+                            price:this.freePrice
+
                         }
                     };
                     this.daysInMonth.push(date);
@@ -70,6 +74,28 @@
                 }
 
             },
+
+            setPrice(action){
+
+                var price = 0;
+
+                switch (action.type) {
+
+                    case 'free':
+                        price = this.freePrice;
+                        break;
+
+                    case 'special':
+                        price = this.specialOffer;
+                        break;
+
+                    case 'last':
+                        price = this.lastMinute;
+                        break;
+                }
+                return price;
+            },
+
             modify(field) {
 
                 if (!this.selectAction) {
@@ -90,6 +116,7 @@
 
                 searchField.type.status = search.type;
                 searchField.type.background = search.background;
+                searchField.type.price = this.setPrice(search);
             },
             save() {
 

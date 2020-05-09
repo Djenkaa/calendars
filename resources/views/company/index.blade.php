@@ -39,10 +39,11 @@
             <div class="mb-4 moreOptions" style="display: none;">
                 <input type="text" placeholder="last minute price" v-model="lastMinute">
                 <input type="text" placeholder="special offer price" v-model="specialOffer">
+                <input type="text" placeholder="normalna cena" v-model="freePrice">
             </div>
 
             <button @click="generateCalendar" class="btn btn-primary">Generate Calendar</button>
-            <button @click="save" class="btn btn-success">Save</button>
+            <button v-if="daysInMonth.length > 0" @click="save" class="btn btn-success">Save</button>
 
             {{--       CALENDAR     --}}
 
@@ -68,7 +69,7 @@
 
             <div v-if="showCalendar">
                 <input type="radio" value="free" v-model="selectAction"> Dostupno
-                <input type="radio" value="busy" v-model="selectAction"> Zauzeto
+                <input type="radio" value="reserved" v-model="selectAction"> Zauzeto
                 <input type="radio" value="last" v-model="selectAction"> Last minute
                 <input type="radio" value="special" v-model="selectAction"> Special
             </div>

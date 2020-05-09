@@ -22,9 +22,12 @@ class Calendar extends Model
     {
         $min = min($dates);
         $max = max($dates);
+        $until = $max > count($dates) ? $max : $max + 1;
 
-        $period = $min.'/'.$this->month.'/'.$this->year .' - '. $max.'/'.$this->month.'/'.$this->year;
+        $period = $min.'/'.$this->month.'/'.$this->year .' - '. $until.'/'.$this->month.'/'.$this->year;
 
         return $period;
     }
+
+
 }

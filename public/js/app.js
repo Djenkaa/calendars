@@ -1923,6 +1923,7 @@ __webpack_require__.r(__webpack_exports__);
       selectMonth: new Date().getMonth(),
       lastMinute: 0,
       specialOffer: 0,
+      freePrice: 0,
       showCalendar: false,
       daysInMonth: [],
       firstDay: 0,
@@ -1932,7 +1933,7 @@ __webpack_require__.r(__webpack_exports__);
         type: 'free',
         background: 'rgba(71, 255, 105, 0.4)'
       }, {
-        type: 'busy',
+        type: 'reserved',
         background: 'rgba(255, 71, 71,0.4)'
       }, {
         type: 'special',
@@ -1953,8 +1954,9 @@ __webpack_require__.r(__webpack_exports__);
         var date = {
           field: i,
           type: {
-            'status': 'free',
-            'background': 'rgba(71, 255, 105,0.4)'
+            status: 'free',
+            background: 'rgba(71, 255, 105,0.4)',
+            price: this.freePrice
           }
         };
         this.daysInMonth.push(date);
@@ -1966,6 +1968,25 @@ __webpack_require__.r(__webpack_exports__);
         this.showCalendar = true;
         this.firstDay = firstDay;
       }
+    },
+    setPrice: function setPrice(action) {
+      var price = 0;
+
+      switch (action.type) {
+        case 'free':
+          price = this.freePrice;
+          break;
+
+        case 'special':
+          price = this.specialOffer;
+          break;
+
+        case 'last':
+          price = this.lastMinute;
+          break;
+      }
+
+      return price;
     },
     modify: function modify(field) {
       var _this = this;
@@ -1983,6 +2004,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       searchField.type.status = search.type;
       searchField.type.background = search.background;
+      searchField.type.price = this.setPrice(search);
     },
     save: function save() {
       axios.post('/calendar/store', {
@@ -2108,6 +2130,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2119,12 +2146,16 @@ __webpack_require__.r(__webpack_exports__);
       user: {
         userDates: [],
         fullName: '',
-        phone: ''
+        phone: '',
+        email: '',
+        price: 0,
+        period: ''
       }
     };
   },
   props: ['companies'],
   methods: {
+    // reservation
     reservation: function reservation(calendarId) {
       var _this = this;
 
@@ -2137,12 +2168,13 @@ __webpack_require__.r(__webpack_exports__);
         console.log(e);
       });
     },
+    // available fields
     availableFields: function availableFields(field) {
       var count = field;
 
       for (var i = 0; i < this.dates.length; i++) {
-        if (this.dates[i].type.status == 'free') {
-          this.dates[i].type.status = 'unavailable';
+        if (this.dates[i].type.status == 'free' || this.dates[i].type.status == 'last' || this.dates[i].type.status == 'special') {
+          this.dates[i].type.status = 'notAllowed';
           this.dates[i].type.background = '#FF8A75';
         }
       }
@@ -2151,27 +2183,42 @@ __webpack_require__.r(__webpack_exports__);
         return el.field == count + 1;
       });
 
-      if (possibleField.type.status == 'busy') {
+      if (!possibleField || possibleField.type.status == 'reserved') {
         return;
       }
 
       possibleField.type.status = 'free';
       possibleField.type.background = 'rgba(255,255,255, 0.3)';
     },
-    reserve: function reserve(field) {
+    // reserve
+    reserve: function reserve(field, calendarId) {
+      var _this2 = this;
+
       var searchDate = this.dates.find(function (el) {
         return el.field == field;
       });
+      console.log(searchDate);
 
-      if (searchDate.type.status == 'busy' || searchDate.type.status == 'unavailable') {
+      if (searchDate.type.status == 'reserved' || searchDate.type.status == 'notAllowed') {
         return;
       }
 
       this.availableFields(field);
-      searchDate.type.status = 'busy';
+      searchDate.type.status = 'reserved';
       searchDate.type.background = 'rgba(255,255,255, 0.3)';
       this.user.userDates.push(field);
+      axios.post('/calendar/price', {
+        dates: this.user.userDates,
+        calendarId: calendarId
+      }).then(function (data) {
+        console.log(data.data);
+        _this2.user.price = data.data.price;
+        _this2.user.period = data.data.period;
+      })["catch"](function (e) {
+        console.log(e);
+      });
     },
+    // send reservation
     sendReservation: function sendReservation(calendarId) {
       axios.post('/calendar/reserve', {
         calendarId: calendarId,
@@ -2184,6 +2231,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(e);
       });
     },
+    // field background
     paintField: function paintField(index, fields) {
       var field = fields.find(function (el) {
         return el.field == index;
@@ -2197,6 +2245,10 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return field.type.background;
+    },
+    reset: function reset(id) {
+      this.reservation(id);
+      this.user.userDates = [];
     }
   },
   mounted: function mounted() {}
@@ -6766,7 +6818,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Fjalla+One:400|Roboto:400,400italic,700);", ""]);
 
 // module
-exports.push([module.i, "\nbody[data-v-299e239e] {\n    background-color: #282423;\n}\n.card[data-v-299e239e] {\n    background: white;\n    border: 1px solid #eee;\n    box-shadow: 0px 0px 10px #ccc;\n    padding: 10px;\n}\n.jzdbox[data-v-299e239e] {\n    width: 315px;\n    background: #332f2e;\n    border-radius: 5px;\n    overflow: hidden;\n    display: block;\n    margin-bottom: 10px;\n    box-shadow: 0 0 10px #201d1c;\n    margin: 0 auto;\n    margin-top: 20px;\n}\n.jzdcal[data-v-299e239e] {\n    padding: 0 10px 10px 10px;\n    box-sizing: border-box !important;\n    background: #749d9e;\n    background: linear-gradient(#749d9e, #b3a68b) !important;\n}\n.jzdcalt[data-v-299e239e] {\n    font: 18px 'Roboto';\n    font-weight: 700;\n    color: #f7f3eb;\n    display: block;\n    margin: 18px 0 0 0;\n    text-transform: uppercase;\n    text-align: center;\n    letter-spacing: 1px;\n}\n.jzdcal span[data-v-299e239e] {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    color: #f7f3eb;\n    text-align: center;\n    width: 42px;\n    height: 42px;\n    display: inline-block;\n    float: left;\n    overflow: hidden;\n    line-height: 40px;\n}\n.jzdcal .jzdb[data-v-299e239e]:before {\n    opacity: 0.3;\n    content: 'o';\n}\n.circle[data-v-299e239e] {\n    border: 1px solid #f7f3eb;\n    box-sizing: border-box !important;\n    border-radius: 200px !important;\n}\nspan[data-title][data-v-299e239e]:hover:after,\ndiv[data-title][data-v-299e239e]:hover:after {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    content: attr(data-title);\n    position: absolute;\n    margin: 0 0 100px;\n    background: #282423;\n    border: 1px solid #f7f3eb;\n    color: #f7f3eb;\n    padding: 5px;\n    z-index: 9999;\n    min-width: 150px;\n    max-width: 150px;\n}\n.jzdbox .day[data-v-299e239e] {\n    cursor: pointer;\n    border: 1px solid rgba(255, 255, 255, 0.6);\n}\n.typeOfField[data-v-299e239e] {\n    margin-left: 20px;\n}\n.fieldColor[data-v-299e239e] {\n    display: inline-block;\n    width: 20px;\n    height: 20px;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-299e239e] {\n    background-color: #282423;\n}\n.card[data-v-299e239e] {\n    background: white;\n    border: 1px solid #eee;\n    box-shadow: 0px 0px 10px #ccc;\n    padding: 10px;\n}\n.jzdbox[data-v-299e239e] {\n    width: 315px;\n    background: #332f2e;\n    border-radius: 5px;\n    overflow: hidden;\n    display: block;\n    margin-bottom: 10px;\n    box-shadow: 0 0 10px #201d1c;\n    margin: 0 auto;\n    margin-top: 20px;\n    height: 344px;\n}\n.jzdcal[data-v-299e239e] {\n    padding: 0 10px 10px 10px;\n    box-sizing: border-box !important;\n    background: #749d9e;\n    background: linear-gradient(#749d9e, #b3a68b) !important;\n}\n.jzdcalt[data-v-299e239e] {\n    font: 18px 'Roboto';\n    font-weight: 700;\n    color: #f7f3eb;\n    display: block;\n    margin: 18px 0 0 0;\n    text-transform: uppercase;\n    text-align: center;\n    letter-spacing: 1px;\n}\n.jzdcal span[data-v-299e239e] {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    color: #f7f3eb;\n    text-align: center;\n    width: 42px;\n    height: 42px;\n    display: inline-block;\n    float: left;\n    overflow: hidden;\n    line-height: 40px;\n}\n.jzdcal .jzdb[data-v-299e239e]:before {\n    opacity: 0.3;\n    content: 'o';\n}\n.circle[data-v-299e239e] {\n    border: 1px solid #f7f3eb;\n    box-sizing: border-box !important;\n    border-radius: 200px !important;\n}\nspan[data-title][data-v-299e239e]:hover:after,\ndiv[data-title][data-v-299e239e]:hover:after {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    content: attr(data-title);\n    position: absolute;\n    margin: 0 0 100px;\n    background: #282423;\n    border: 1px solid #f7f3eb;\n    color: #f7f3eb;\n    padding: 5px;\n    z-index: 9999;\n    min-width: 150px;\n    max-width: 150px;\n}\n.jzdbox .day[data-v-299e239e] {\n    cursor: pointer;\n    border: 1px solid rgba(255, 255, 255, 0.6);\n}\n.typeOfField[data-v-299e239e] {\n    margin-left: 20px;\n}\n.fieldColor[data-v-299e239e] {\n    display: inline-block;\n    width: 20px;\n    height: 20px;\n}\n\n", ""]);
 
 // exports
 
@@ -39215,7 +39267,10 @@ var render = function() {
             _vm._v(" "),
             _c(
               "div",
-              { staticClass: "row" },
+              {
+                staticClass: "row flex-nowrap",
+                staticStyle: { height: "400px", "overflow-x": "scroll" }
+              },
               _vm._l(company.current_year, function(calendar) {
                 return _c("div", { staticClass: "col-md-4" }, [
                   _c(
@@ -39335,7 +39390,7 @@ var render = function() {
                           },
                           on: {
                             click: function($event) {
-                              return _vm.reserve(date.field)
+                              return _vm.reserve(date.field, _vm.cal.id)
                             }
                           }
                         },
@@ -39354,60 +39409,108 @@ var render = function() {
                 _vm._v(" "),
                 _c("br"),
                 _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.user.fullName,
-                      expression: "user.fullName"
-                    }
-                  ],
-                  attrs: { type: "text", placeholder: "full name" },
-                  domProps: { value: _vm.user.fullName },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.user, "fullName", $event.target.value)
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.user.phone,
-                      expression: "user.phone"
-                    }
-                  ],
-                  attrs: { type: "text", placeholder: "phone" },
-                  domProps: { value: _vm.user.phone },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.user, "phone", $event.target.value)
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.sendReservation(_vm.cal.id)
-                      }
-                    }
-                  },
-                  [_vm._v("Reserve")]
-                )
+                _vm.user.userDates.length >= 3
+                  ? _c("div", [
+                      _c("p", [
+                        _vm._v(
+                          "period: " +
+                            _vm._s(_vm.user.period) +
+                            " cena: " +
+                            _vm._s(_vm.user.price) +
+                            "$"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.user.fullName,
+                            expression: "user.fullName"
+                          }
+                        ],
+                        attrs: { type: "text", placeholder: "full name" },
+                        domProps: { value: _vm.user.fullName },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.user, "fullName", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.user.phone,
+                            expression: "user.phone"
+                          }
+                        ],
+                        attrs: { type: "text", placeholder: "phone" },
+                        domProps: { value: _vm.user.phone },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.user, "phone", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.user.email,
+                            expression: "user.email"
+                          }
+                        ],
+                        attrs: { type: "email", placeholder: "email" },
+                        domProps: { value: _vm.user.email },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.user, "email", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.sendReservation(_vm.cal.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Reserve")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          on: {
+                            click: function($event) {
+                              return _vm.reset(_vm.cal.id)
+                            }
+                          }
+                        },
+                        [_vm._v("Reset")]
+                      )
+                    ])
+                  : _vm._e()
               ])
             ]
           )

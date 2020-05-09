@@ -11,7 +11,7 @@
 
 
                 <!--           CALENDARS             -->
-                <div class="row">
+                <div class="row flex-nowrap" style="height: 400px; overflow-x:scroll;">
 
                     <div class="col-md-4" v-for="calendar in company.current_year">
 
@@ -73,7 +73,7 @@
                         <span class="jzdb" v-for="n in cal.firstDay">
                 <!--BLANK--></span>
 
-                        <span class="day" v-for="(date, index) in dates" @click="reserve(date.field)"
+                        <span class="day" v-for="(date, index) in dates" @click="reserve(date.field, cal.id)"
                               :style="{background: paintField(index + 1, dates)}">
                             {{date.field}}
                         </span>
@@ -83,9 +83,14 @@
                     <br>
 
                     <!--          USER DATA          -->
+                    <div v-if="user.userDates.length >= 3">
+                        <p>period: {{user.period}} cena: {{user.price}}$</p>
                     <input type="text" placeholder="full name" v-model="user.fullName">
                     <input type="text" placeholder="phone" v-model="user.phone">
+                    <input type="email" placeholder="email" v-model="user.email">
                     <button class="btn btn-primary" @click="sendReservation(cal.id)">Reserve</button>
+                    <button class="btn btn-danger" @click="reset(cal.id)">Reset</button>
+                    </div>
 
                 </div>
             </div>
@@ -110,6 +115,9 @@
                     userDates: [],
                     fullName: '',
                     phone: '',
+                    email:'',
+                    price:0,
+                    period:''
                 },
 
             }
@@ -119,6 +127,7 @@
 
         methods: {
 
+            // reservation
             reservation(calendarId) {
 
                 axios.get('/calendar/show/' + calendarId)
@@ -135,14 +144,17 @@
 
             },
 
+            // available fields
             availableFields(field) {
 
                 var count = field;
 
                 for (var i = 0; i < this.dates.length; i++) {
 
-                    if (this.dates[i].type.status == 'free') {
-                        this.dates[i].type.status = 'unavailable';
+                    if (this.dates[i].type.status == 'free' || this.dates[i].type.status == 'last' ||
+                        this.dates[i].type.status == 'special') {
+
+                        this.dates[i].type.status = 'notAllowed';
                         this.dates[i].type.background = '#FF8A75';
                     }
                 }
@@ -151,7 +163,7 @@
                     return el.field == count + 1;
                 });
 
-                if (possibleField.type.status == 'busy') {
+                if (!possibleField || possibleField.type.status == 'reserved') {
                     return;
                 }
 
@@ -159,25 +171,42 @@
                 possibleField.type.background = 'rgba(255,255,255, 0.3)';
             },
 
-            reserve(field) {
+            // reserve
+            reserve(field, calendarId) {
 
                 var searchDate = this.dates.find(el => {
                     return el.field == field
                 });
 
-                if (searchDate.type.status == 'busy' || searchDate.type.status == 'unavailable') {
+                console.log(searchDate);
+                if (searchDate.type.status == 'reserved' || searchDate.type.status == 'notAllowed') {
                     return;
                 }
 
                 this.availableFields(field);
 
-                searchDate.type.status = 'busy';
+                searchDate.type.status = 'reserved';
                 searchDate.type.background = 'rgba(255,255,255, 0.3)';
 
                 this.user.userDates.push(field);
 
+                axios.post('/calendar/price',{
+                   dates:this.user.userDates,
+                    calendarId
+
+                })
+                    .then(data=>{
+                        console.log(data.data);
+                        this.user.price = data.data.price;
+                        this.user.period = data.data.period;
+                    })
+                    .catch(e=>{
+                       console.log(e);
+                    });
+
             },
 
+            // send reservation
             sendReservation(calendarId) {
 
                 axios.post('/calendar/reserve', {
@@ -194,6 +223,7 @@
                 });
             },
 
+            // field background
             paintField(index, fields) {
 
                 var field = fields.find(el => {
@@ -205,9 +235,14 @@
                 });
 
                 if (lastField) {
-                        return 'linear-gradient(to right bottom, ' + lastField.type.background + ' 50%, ' + field.type.background + ' 50%)';
+                    return 'linear-gradient(to right bottom, ' + lastField.type.background + ' 50%, ' + field.type.background + ' 50%)';
                 }
                 return field.type.background;
+            },
+
+            reset(id){
+                this.reservation(id);
+                this.user.userDates = [];
             }
 
 
@@ -246,6 +281,7 @@
         box-shadow: 0 0 10px #201d1c;
         margin: 0 auto;
         margin-top: 20px;
+        height: 344px;
     }
 
     .jzdcal {

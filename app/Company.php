@@ -22,8 +22,11 @@ class Company extends Model
     }
 
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function currentYear()
     {
-        return $this->hasMany(Calendar::class,'company_id')->where('year', now()->year);
+        return $this->calendars()->where('year', now()->year)->orderBy('month', 'asc');
     }
 }
