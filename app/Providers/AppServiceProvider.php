@@ -2,11 +2,23 @@
 
 namespace App\Providers;
 
+use App\repositories\CalendarRepository;
+use App\repositories\interfaces\CalendarRepositoryInterface;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+
+    /**
+     * @var array
+     */
+    public $singletons = [
+       CalendarRepositoryInterface::class=>CalendarRepository::class
+    ];
+
+
+
     /**
      * Register any application services.
      *
@@ -14,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
     }
 
     /**

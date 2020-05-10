@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Calendar;
 use App\Http\Requests\CalendarRequest;
 use App\Http\Requests\ReservationRequest;
+use App\repositories\CalendarRepository;
 use App\Reservation;
 use http\Env\Response;
 use Illuminate\Http\Request;
@@ -12,6 +13,20 @@ use Illuminate\Http\Request;
 class CalendarController extends Controller
 {
 
+    /**
+     * @var CalendarRepository
+     */
+    private $calendarRepository;
+
+
+    /**
+     * CalendarController constructor.
+     * @param CalendarRepository $calendarRepository
+     */
+    public function __construct(CalendarRepository $calendarRepository)
+    {
+        $this->calendarRepository = $calendarRepository;
+    }
 
     /**
      * @param Request $request
@@ -20,11 +35,10 @@ class CalendarController extends Controller
      */
     public function store(Request $request, CalendarRequest $req)
     {
-        $calendar = Calendar::where([['year',$request->year], ['month',$request->month], ['company_id', $request->companyId]])
-            ->first();
+        $calendar = $this->calendarRepository->exist($request->year, $request->month, $request->companyId);
 
-        if($calendar){
-            return \response()->json(['error'=>'Vec ste kreirali kalendar za taj mesec']);
+        if ($calendar) {
+            return \response()->json(['error' => 'Vec ste kreirali kalendar za taj mesec']);
         }
 
         $req->persist();
@@ -52,16 +66,16 @@ class CalendarController extends Controller
     {
         $calendar = Calendar::find($request->calendarId);
 
-        if(!Reservation::freeDates($request->dates, $calendar->id)){
+        if (!Reservation::freeDates($request->dates, $calendar->id)) {
 
-            return \response()->json(['error'=>'Izabrali ste datume koju su zauzeti!']);
+            return \response()->json(['error' => 'Izabrali ste datume koju su zauzeti!']);
         }
-        $datesNumber = count(json_decode($calendar['dates'],true));
+        $datesNumber = count(json_decode($calendar['dates'], true));
         $period = $calendar->makePeriod($request->dates, $datesNumber);
 
         $req->persist($period);
 
-       return response()->json('success');
+        return response()->json('success');
     }
 
 
@@ -71,16 +85,11 @@ class CalendarController extends Controller
      */
     public function price(Request $request)
     {
-        $calendar = Calendar::find($request->calendarId);
-        $datesNumber = count(json_decode($calendar['dates'],true));
-
-        $period = $calendar->makePeriod($request->dates, $datesNumber);
-
-        $price = Reservation::price($request->dates, $request->calendarId);
+        list($period, $price) = $this->calendarRepository->priceAndPeriod($request->dates, $request->calendarId);
 
         $result = [
-            'period'=>$period,
-            'price'=>$price
+            'period' => $period,
+            'price' => $price
         ];
         return $result;
     }

@@ -7,16 +7,16 @@
 
     {{--  CALENDAR OPTIONS  --}}
 
-    <div class="container">
+    <div class="container" v-cloak>
         <div class="row mt-5 mb-5">
             <div class="col-md-8 offset-md-2">
 
                 <div class="card">
                     <div class="card-header">
-                        Calendar
+                        {{__('appTerms.calendar')}}
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">Make calendar</h5>
+                        <h5 class="card-title">{{__('admin.create')}}</h5>
                         <hr>
 
                         {{--            FORM            --}}
@@ -30,7 +30,7 @@
                                     <div class="col-md-4">
 
                                         <div class="form-group">
-                                            <label for="exampleFormControlSelect1">Izaberi firmu</label>
+                                            <label for="exampleFormControlSelect1">{{__('admin.selectCompany')}}</label>
                                             <select class="form-control" id="exampleFormControlSelect1"
                                                     v-model="selectCompany">
                                                 @foreach($companies as $company)
@@ -45,7 +45,7 @@
                                     <div class="col-md-4">
 
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Godina</label>
+                                            <label for="exampleInputEmail1">{{__('admin.selectYear')}}</label>
                                             <input type="text" class="form-control" id="exampleInputEmail1"
                                                    aria-describedby="emailHelp"
                                                    v-model="selectYear">
@@ -56,7 +56,7 @@
                                     <div class="col-md-4">
 
                                         <div class="form-group">
-                                            <label for="exampleFormControlSelect1">Izaberi mesec</label>
+                                            <label for="exampleFormControlSelect1">{{__('admin.selectMonth')}}</label>
                                             <select class="form-control" id="exampleFormControlSelect1"
                                                     v-model="selectMonth">
 
@@ -72,11 +72,8 @@
 
                                 {{--       MORE OPTIONS     --}}
 
-                                <div class="alert alert-info" role="alert">
-                                    Na poljima ispod upistie odredjenu cenu za datume.
-                                    Ako ne zelite u ponudu da stavite last minute ili special offer ostavite 0 na tim
-                                    poljima.
-                                </div>
+                                <h6>{{__('admin.dateType')}} <small>({{__('admin.dateTypeAtt')}})</small></h6>
+                                <hr>
 
                                 <div class="row">
 
@@ -84,7 +81,7 @@
 
                                         {{--        Normal      --}}
                                         <div class="form-group">
-                                            <label for="normalPrice">Normal</label>
+                                            <label for="normalPrice">{{__('appTerms.free')}}</label>
                                             <input type="text" class="form-control" id="normalPrice"
                                                    aria-describedby="emailHelp"
                                                    v-model="freePrice">
@@ -96,7 +93,7 @@
 
                                         {{--        last minute      --}}
                                         <div class="form-group">
-                                            <label for="lastMinutePrice">Last minute</label>
+                                            <label for="lastMinutePrice">{{__('appTerms.last')}}</label>
                                             <input type="text" class="form-control" id="lastMinutePrice"
                                                    aria-describedby="emailHelp"
                                                    v-model="lastMinute">
@@ -108,7 +105,7 @@
 
                                         {{--        special      --}}
                                         <div class="form-group">
-                                            <label for="specialPrice">Special</label>
+                                            <label for="specialPrice">{{__('appTerms.special')}}</label>
                                             <input type="text" class="form-control" id="specialPrice"
                                                    aria-describedby="emailHelp"
                                                    v-model="specialOffer">
@@ -119,7 +116,7 @@
                                 </div>
 
                                 {{--    Generate calendar   --}}
-                                <button @click="generateCalendar" class="btn btn-primary">Generate Calendar</button>
+                                <button @click="generateCalendar" class="btn btn-primary">{{__('buttons.generate')}}</button>
 
                                 {{--       CALENDAR     --}}
 
@@ -131,34 +128,34 @@
 
                                             <li><span class="fieldColor"
                                                       style="background: rgba(71, 255, 105, 0.4);"></span>
-                                                <input type="radio" value="free" v-model="selectAction"> Slobodno
+                                                <input type="radio" value="free" v-model="selectAction"> {{__('appTerms.free')}}
                                             </li>
 
                                             <li><span class="fieldColor"
                                                       style="background: rgba(255, 71, 71,0.4);"></span>
-                                                <input type="radio" value="reserved" v-model="selectAction"> Rezervisano
+                                                <input type="radio" value="reserved" v-model="selectAction"> {{__('appTerms.reserved')}}
                                             </li>
 
                                             <li><span class="fieldColor"
                                                       style="background: rgba(255, 224, 71, 0.4);"></span>
-                                                <input type="radio" value="last" v-model="selectAction"> Last minute
+                                                <input type="radio" value="last" v-model="selectAction"> {{__('appTerms.last')}}
                                             </li>
 
                                             <li><span class="fieldColor"
                                                       style="background: rgba(71, 227, 255, 0.4);"></span>
-                                                <input type="radio" value="special" v-model="selectAction"> Specijalna
+                                                <input type="radio" value="special" v-model="selectAction"> {{__('appTerms.special')}}
                                                 ponuda
                                             </li>
                                             <li style="margin-top: 20px;">
                                                 <button v-if="daysInMonth.length > 0" @click="save"
-                                                        class="btn btn-success">Save
+                                                        class="btn btn-success">{{__('buttons.save')}}
                                                 </button>
                                             </li>
 
                                         </ul>
                                         {{--    errors   --}}
                                         <div v-for="error in errors" class="alert alert-danger" role="alert">
-                                          @{{ error }}
+                                            @{{ error }}
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>

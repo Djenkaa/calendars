@@ -15,6 +15,12 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
 
 
+mix.styles([
+    'resources/css/calendar.css'
+
+], 'public/css/all.css');
+
+
 if (mix.inProduction()) {
     mix.version();
 }

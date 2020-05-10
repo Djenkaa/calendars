@@ -16,14 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'CompanyController@welcome')->name('company.welcome');
 
-Route::prefix('company')->group(function () {
-
-
-    Route::get('/admin','CompanyController@index')->name('company.index');
+Route::get('/admin','CompanyController@index')->name('company.index');
 
 
 
-});
+
 
 
 
