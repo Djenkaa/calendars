@@ -61,4 +61,22 @@ class Reservation extends Model
         }
         return $price;
     }
+
+
+    public static function freeDates($dates, $calendarId)
+    {
+        $calendar = Calendar::find($calendarId);
+        $calendarDates = json_decode($calendar['dates'], true);
+
+        foreach ($calendarDates as $date){
+
+            if($date['type']['status'] == 'reserved'){
+
+                if(in_array($date['field'], $dates)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

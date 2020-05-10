@@ -18,8 +18,6 @@ class CompanyController extends Controller
     {
         $companies = Company::all();
 
-//        $price = Reservation::price([1,2], 3);
-//        dd($price);
         return view('company.index', compact('companies'));
     }
 
