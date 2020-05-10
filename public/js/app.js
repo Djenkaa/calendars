@@ -1929,6 +1929,7 @@ __webpack_require__.r(__webpack_exports__);
       firstDay: 0,
       calendarMonth: '',
       selectAction: '',
+      errors: [],
       actions: [{
         type: 'free',
         background: 'rgba(71, 255, 105, 0.4)'
@@ -1963,7 +1964,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (days) {
-        // this.daysInMonth = days;
         this.calendarMonth = this.months[this.selectMonth];
         this.showCalendar = true;
         this.firstDay = firstDay;
@@ -1992,7 +1992,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (!this.selectAction) {
-        console.log('moras izabrati neku akciju!');
+        this.errors.push('Morate izabrati ponudu');
         return;
       }
 
@@ -2007,14 +2007,26 @@ __webpack_require__.r(__webpack_exports__);
       searchField.type.price = this.setPrice(search);
     },
     save: function save() {
+      if (this.freePrice < 1 || this.freePrice == '') {
+        this.errors.push('Morate staviti cenu za slobodne datume');
+        return;
+      }
+
       axios.post('/calendar/store', {
         year: this.selectYear,
         month: this.selectMonth,
         dates: this.daysInMonth,
         firstDay: this.firstDay,
-        companyId: this.selectCompany
+        companyId: this.selectCompany,
+        free: this.freePrice,
+        lastMinute: this.lastMinute,
+        special: this.specialOffer
       }).then(function (data) {
-        location.reload();
+        console.log(data.data);
+
+        if (data.data == 'success') {
+          location.reload();
+        }
       })["catch"](function (e) {
         console.log(e);
       });
@@ -2033,6 +2045,52 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2224,7 +2282,9 @@ __webpack_require__.r(__webpack_exports__);
         calendarId: calendarId,
         dates: this.user.userDates,
         fullName: this.user.fullName,
-        phone: this.user.phone
+        email: this.user.email,
+        phone: this.user.phone,
+        price: this.user.price
       }).then(function (data) {
         console.log(data.data);
       })["catch"](function (e) {
@@ -6799,7 +6859,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Fjalla+One:400|Roboto:400,400italic,700);", ""]);
 
 // module
-exports.push([module.i, "\nbody[data-v-58b78718] {\n    background-color: #282423;\n}\n.jzdbox[data-v-58b78718] {\n    width: 315px;\n    background: #332f2e;\n    border-radius: 5px;\n    overflow: hidden;\n    display: block;\n    margin-bottom: 10px;\n    box-shadow: 0 0 10px #201d1c;\n    margin: 0 auto;\n    margin-top: 100px;\n}\n.jzdcal[data-v-58b78718] {\n    padding: 0 10px 10px 10px;\n    box-sizing: border-box !important;\n    background: #749d9e;\n    background: linear-gradient(#749d9e, #b3a68b) !important;\n}\n.jzdcalt[data-v-58b78718] {\n    font: 18px 'Roboto';\n    font-weight: 700;\n    color: #f7f3eb;\n    display: block;\n    margin: 18px 0 0 0;\n    text-transform: uppercase;\n    text-align: center;\n    letter-spacing: 1px;\n}\n.jzdcal span[data-v-58b78718] {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    color: #f7f3eb;\n    text-align: center;\n    width: 42px;\n    height: 42px;\n    display: inline-block;\n    float: left;\n    overflow: hidden;\n    line-height: 40px;\n}\n.jzdcal .jzdb[data-v-58b78718]:before {\n    opacity: 0.3;\n    content: 'o';\n}\n.circle[data-v-58b78718] {\n    border: 1px solid #f7f3eb;\n    box-sizing: border-box !important;\n    border-radius: 200px !important;\n}\nspan[data-title][data-v-58b78718]:hover:after,\ndiv[data-title][data-v-58b78718]:hover:after {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    content: attr(data-title);\n    position: absolute;\n    margin: 0 0 100px;\n    background: #282423;\n    border: 1px solid #f7f3eb;\n    color: #f7f3eb;\n    padding: 5px;\n    z-index: 9999;\n    min-width: 150px;\n    max-width: 150px;\n}\n.jzdbox .day[data-v-58b78718] {\n    border: 1px solid rgba(255, 255, 255, 0.6);\n    cursor: pointer;\n}\n.jzdbox .day[data-v-58b78718]:hover {\n    background: rgba(255, 255, 255, 0.6);\n    color: black;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-58b78718] {\n    background-color: #282423;\n}\n.jzdbox[data-v-58b78718] {\n    width: 315px;\n    background: #332f2e;\n    border-radius: 5px;\n    overflow: hidden;\n    display: block;\n    margin-bottom: 10px;\n    box-shadow: 0 0 10px #201d1c;\n    margin: 0 auto;\n}\n.jzdcal[data-v-58b78718] {\n    padding: 0 10px 10px 10px;\n    box-sizing: border-box !important;\n    background: #749d9e;\n    background: linear-gradient(#749d9e, #b3a68b) !important;\n}\n.jzdcalt[data-v-58b78718] {\n    font: 18px 'Roboto';\n    font-weight: 700;\n    color: #f7f3eb;\n    display: block;\n    margin: 18px 0 0 0;\n    text-transform: uppercase;\n    text-align: center;\n    letter-spacing: 1px;\n}\n.jzdcal span[data-v-58b78718] {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    color: #f7f3eb;\n    text-align: center;\n    width: 42px;\n    height: 42px;\n    display: inline-block;\n    float: left;\n    overflow: hidden;\n    line-height: 40px;\n}\n.jzdcal .jzdb[data-v-58b78718]:before {\n    opacity: 0.3;\n    content: 'o';\n}\n.circle[data-v-58b78718] {\n    border: 1px solid #f7f3eb;\n    box-sizing: border-box !important;\n    border-radius: 200px !important;\n}\nspan[data-title][data-v-58b78718]:hover:after,\ndiv[data-title][data-v-58b78718]:hover:after {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    content: attr(data-title);\n    position: absolute;\n    margin: 0 0 100px;\n    background: #282423;\n    border: 1px solid #f7f3eb;\n    color: #f7f3eb;\n    padding: 5px;\n    z-index: 9999;\n    min-width: 150px;\n    max-width: 150px;\n}\n.jzdbox .day[data-v-58b78718] {\n    border: 1px solid rgba(255, 255, 255, 0.6);\n    cursor: pointer;\n}\n.jzdbox .day[data-v-58b78718]:hover {\n    background: rgba(255, 255, 255, 0.6);\n    color: black;\n}\n#optionList li[data-v-58b78718]{\n    list-style: none;\n    margin-top: 10px;\n}\n.fieldColor[data-v-58b78718] {\n    display: inline-block;\n    width: 20px;\n    height: 20px;\n}\n\n", ""]);
 
 // exports
 
@@ -6818,7 +6878,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Fjalla+One:400|Roboto:400,400italic,700);", ""]);
 
 // module
-exports.push([module.i, "\nbody[data-v-299e239e] {\n    background-color: #282423;\n}\n.card[data-v-299e239e] {\n    background: white;\n    border: 1px solid #eee;\n    box-shadow: 0px 0px 10px #ccc;\n    padding: 10px;\n}\n.jzdbox[data-v-299e239e] {\n    width: 315px;\n    background: #332f2e;\n    border-radius: 5px;\n    overflow: hidden;\n    display: block;\n    margin-bottom: 10px;\n    box-shadow: 0 0 10px #201d1c;\n    margin: 0 auto;\n    margin-top: 20px;\n    height: 344px;\n}\n.jzdcal[data-v-299e239e] {\n    padding: 0 10px 10px 10px;\n    box-sizing: border-box !important;\n    background: #749d9e;\n    background: linear-gradient(#749d9e, #b3a68b) !important;\n}\n.jzdcalt[data-v-299e239e] {\n    font: 18px 'Roboto';\n    font-weight: 700;\n    color: #f7f3eb;\n    display: block;\n    margin: 18px 0 0 0;\n    text-transform: uppercase;\n    text-align: center;\n    letter-spacing: 1px;\n}\n.jzdcal span[data-v-299e239e] {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    color: #f7f3eb;\n    text-align: center;\n    width: 42px;\n    height: 42px;\n    display: inline-block;\n    float: left;\n    overflow: hidden;\n    line-height: 40px;\n}\n.jzdcal .jzdb[data-v-299e239e]:before {\n    opacity: 0.3;\n    content: 'o';\n}\n.circle[data-v-299e239e] {\n    border: 1px solid #f7f3eb;\n    box-sizing: border-box !important;\n    border-radius: 200px !important;\n}\nspan[data-title][data-v-299e239e]:hover:after,\ndiv[data-title][data-v-299e239e]:hover:after {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    content: attr(data-title);\n    position: absolute;\n    margin: 0 0 100px;\n    background: #282423;\n    border: 1px solid #f7f3eb;\n    color: #f7f3eb;\n    padding: 5px;\n    z-index: 9999;\n    min-width: 150px;\n    max-width: 150px;\n}\n.jzdbox .day[data-v-299e239e] {\n    cursor: pointer;\n    border: 1px solid rgba(255, 255, 255, 0.6);\n}\n.typeOfField[data-v-299e239e] {\n    margin-left: 20px;\n}\n.fieldColor[data-v-299e239e] {\n    display: inline-block;\n    width: 20px;\n    height: 20px;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-299e239e] {\n    background-color: #282423;\n}\n.card[data-v-299e239e] {\n    background: white;\n    border: 1px solid #eee;\n    box-shadow: 0px 0px 10px #ccc;\n    padding: 10px;\n}\n.jzdbox[data-v-299e239e] {\n    width: 315px;\n    background: #332f2e;\n    border-radius: 5px;\n    overflow: hidden;\n    display: block;\n    margin-bottom: 10px;\n    box-shadow: 0 0 10px #201d1c;\n    margin: 0 auto;\n    margin-top: 20px;\n    height: 344px;\n}\n.jzdcal[data-v-299e239e] {\n    padding: 0 10px 10px 10px;\n    box-sizing: border-box !important;\n    background: #749d9e;\n    background: linear-gradient(#749d9e, #b3a68b) !important;\n}\n.jzdcalt[data-v-299e239e] {\n    font: 18px 'Roboto';\n    font-weight: 700;\n    color: #f7f3eb;\n    display: block;\n    margin: 18px 0 0 0;\n    text-transform: uppercase;\n    text-align: center;\n    letter-spacing: 1px;\n}\n.jzdcal span[data-v-299e239e] {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    color: #f7f3eb;\n    text-align: center;\n    width: 42px;\n    height: 42px;\n    display: inline-block;\n    float: left;\n    overflow: hidden;\n    line-height: 40px;\n}\n.jzdcal .jzdb[data-v-299e239e]:before {\n    opacity: 0.3;\n    content: 'o';\n}\n.circle[data-v-299e239e] {\n    border: 1px solid #f7f3eb;\n    box-sizing: border-box !important;\n    border-radius: 200px !important;\n}\nspan[data-title][data-v-299e239e]:hover:after,\ndiv[data-title][data-v-299e239e]:hover:after {\n    font: 11px 'Roboto';\n    font-weight: 400;\n    content: attr(data-title);\n    position: absolute;\n    margin: 0 0 100px;\n    background: #282423;\n    border: 1px solid #f7f3eb;\n    color: #f7f3eb;\n    padding: 5px;\n    z-index: 9999;\n    min-width: 150px;\n    max-width: 150px;\n}\n.jzdbox .day[data-v-299e239e] {\n    cursor: pointer;\n    border: 1px solid rgba(255, 255, 255, 0.6);\n}\n.typeOfField[data-v-299e239e] {\n    margin-left: 20px;\n}\n.fieldColor[data-v-299e239e] {\n    display: inline-block;\n    width: 20px;\n    height: 20px;\n}\n#optionList li[data-v-299e239e] {\n    list-style: none;\n    margin-top: 10px;\n}\n.priceAndPeriod[data-v-299e239e]{\n    padding: 10px;\n    border: 1px solid #eee;\n    box-shadow: 0px 0px 5px #ccc;\n}\n\n", ""]);
 
 // exports
 
@@ -39357,160 +39417,261 @@ var render = function() {
                 _vm._v(" "),
                 _c("hr"),
                 _vm._v(" "),
-                _vm._m(0),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "jzdbox jzdbasf jzdcal" },
-                  [
-                    _c("div", { staticClass: "jzdcalt" }, [
-                      _vm._v(
-                        " " +
-                          _vm._s(_vm.months[_vm.cal.month]) +
-                          " " +
-                          _vm._s(_vm.cal.year)
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _vm._l(_vm.daysInWeek, function(day) {
-                      return _c("span", [_vm._v(_vm._s(day))])
-                    }),
-                    _vm._v(" "),
-                    _vm._l(_vm.cal.firstDay, function(n) {
-                      return _c("span", { staticClass: "jzdb" })
-                    }),
-                    _vm._v(" "),
-                    _vm._l(_vm.dates, function(date, index) {
-                      return _c(
-                        "span",
-                        {
-                          staticClass: "day",
-                          style: {
-                            background: _vm.paintField(index + 1, _vm.dates)
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.reserve(date.field, _vm.cal.id)
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-md-6" }, [
+                    _c("ul", { attrs: { id: "optionList" } }, [
+                      _c("li", [
+                        _c("span", { staticClass: "typeOfField" }, [
+                          _c("span", {
+                            staticClass: "fieldColor",
+                            staticStyle: {
+                              background: "rgba(71, 255, 105, 0.4)"
                             }
-                          }
-                        },
-                        [
+                          }),
                           _vm._v(
-                            "\n                        " +
-                              _vm._s(date.field) +
-                              "\n                    "
+                            "\n                                    Dostupno " +
+                              _vm._s(_vm.cal.free + "€")
                           )
-                        ]
-                      )
-                    })
-                  ],
-                  2
-                ),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _vm.user.userDates.length >= 3
-                  ? _c("div", [
-                      _c("p", [
-                        _vm._v(
-                          "period: " +
-                            _vm._s(_vm.user.period) +
-                            " cena: " +
-                            _vm._s(_vm.user.price) +
-                            "$"
-                        )
+                        ])
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.user.fullName,
-                            expression: "user.fullName"
-                          }
-                        ],
-                        attrs: { type: "text", placeholder: "full name" },
-                        domProps: { value: _vm.user.fullName },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.user, "fullName", $event.target.value)
-                          }
-                        }
-                      }),
+                      _vm._m(0),
                       _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.user.phone,
-                            expression: "user.phone"
-                          }
-                        ],
-                        attrs: { type: "text", placeholder: "phone" },
-                        domProps: { value: _vm.user.phone },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                      _c("li", [
+                        _c("span", { staticClass: "typeOfField" }, [
+                          _c("span", {
+                            staticClass: "fieldColor",
+                            staticStyle: {
+                              background: "rgba(71, 227, 255, 0.4)"
                             }
-                            _vm.$set(_vm.user, "phone", $event.target.value)
-                          }
-                        }
-                      }),
+                          }),
+                          _vm._v(
+                            "\n                                    Specijalna ponuda " +
+                              _vm._s(
+                                _vm.cal.special ? _vm.cal.special + "€" : ""
+                              )
+                          )
+                        ])
+                      ]),
                       _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.user.email,
-                            expression: "user.email"
-                          }
-                        ],
-                        attrs: { type: "email", placeholder: "email" },
-                        domProps: { value: _vm.user.email },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                      _c("li", [
+                        _c("span", { staticClass: "typeOfField" }, [
+                          _c("span", {
+                            staticClass: "fieldColor",
+                            staticStyle: {
+                              background: "rgba(255, 224, 71, 0.4)"
                             }
-                            _vm.$set(_vm.user, "email", $event.target.value)
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          on: {
-                            click: function($event) {
-                              return _vm.sendReservation(_vm.cal.id)
-                            }
-                          }
-                        },
-                        [_vm._v("Reserve")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-danger",
-                          on: {
-                            click: function($event) {
-                              return _vm.reset(_vm.cal.id)
-                            }
-                          }
-                        },
-                        [_vm._v("Reset")]
-                      )
-                    ])
-                  : _vm._e()
+                          }),
+                          _vm._v(
+                            "\n                                    Last mintue " +
+                              _vm._s(
+                                _vm.cal.lastMinute
+                                  ? _vm.cal.lastMinute + "€"
+                                  : ""
+                              )
+                          )
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _vm.user.userDates.length >= 3
+                      ? _c("div", { staticClass: "bookingDetails" }, [
+                          _c("p", { staticClass: "priceAndPeriod" }, [
+                            _vm._v(
+                              _vm._s(_vm.user.period) +
+                                "\n                               "
+                            ),
+                            _c(
+                              "span",
+                              {
+                                staticClass: "float-right",
+                                staticStyle: { "font-size": "18px" }
+                              },
+                              [_vm._v(_vm._s(_vm.user.price) + "€")]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "form-group" }, [
+                            _c("label", { attrs: { for: "fullName" } }, [
+                              _vm._v("Full Name")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.user.fullName,
+                                  expression: "user.fullName"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "text", id: "fullName" },
+                              domProps: { value: _vm.user.fullName },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.user,
+                                    "fullName",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "form-group" }, [
+                            _c("label", { attrs: { for: "phone" } }, [
+                              _vm._v("Telefon")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.user.phone,
+                                  expression: "user.phone"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { type: "text", id: "phone" },
+                              domProps: { value: _vm.user.phone },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.user,
+                                    "phone",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "form-group" }, [
+                            _c(
+                              "label",
+                              { attrs: { for: "exampleInputEmail1" } },
+                              [_vm._v("Email")]
+                            ),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.user.email,
+                                  expression: "user.email"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "email",
+                                id: "exampleInputEmail1",
+                                "aria-describedby": "emailHelp"
+                              },
+                              domProps: { value: _vm.user.email },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.user,
+                                    "email",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              on: {
+                                click: function($event) {
+                                  return _vm.sendReservation(_vm.cal.id)
+                                }
+                              }
+                            },
+                            [_vm._v("Reserve")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger",
+                              on: {
+                                click: function($event) {
+                                  return _vm.reset(_vm.cal.id)
+                                }
+                              }
+                            },
+                            [_vm._v("Reset")]
+                          )
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-6" }, [
+                    _c(
+                      "div",
+                      { staticClass: "jzdbox jzdbasf jzdcal" },
+                      [
+                        _c("div", { staticClass: "jzdcalt" }, [
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.months[_vm.cal.month]) +
+                              " " +
+                              _vm._s(_vm.cal.year)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.daysInWeek, function(day) {
+                          return _c("span", [_vm._v(_vm._s(day))])
+                        }),
+                        _vm._v(" "),
+                        _vm._l(_vm.cal.firstDay, function(n) {
+                          return _c("span", { staticClass: "jzdb" })
+                        }),
+                        _vm._v(" "),
+                        _vm._l(_vm.dates, function(date, index) {
+                          return _c(
+                            "span",
+                            {
+                              staticClass: "day",
+                              style: {
+                                background: _vm.paintField(index + 1, _vm.dates)
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.reserve(date.field, _vm.cal.id)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(date.field) +
+                                  "\n                    "
+                              )
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    )
+                  ])
+                ])
               ])
             ]
           )
@@ -39525,37 +39686,13 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
+    return _c("li", [
       _c("span", { staticClass: "typeOfField" }, [
         _c("span", {
-          staticClass: "fieldColor rounded-circle",
-          staticStyle: { background: "#749d9e" }
+          staticClass: "fieldColor",
+          staticStyle: { background: "rgba(255, 71, 71,0.4)" }
         }),
-        _vm._v(" Free")
-      ]),
-      _vm._v(" "),
-      _c("span", { staticClass: "typeOfField" }, [
-        _c("span", {
-          staticClass: "fieldColor rounded-circle",
-          staticStyle: { background: "red" }
-        }),
-        _vm._v(" Reserved")
-      ]),
-      _vm._v(" "),
-      _c("span", { staticClass: "typeOfField" }, [
-        _c("span", {
-          staticClass: "fieldColor rounded-circle",
-          staticStyle: { background: "blue" }
-        }),
-        _vm._v(" Special Offer")
-      ]),
-      _vm._v(" "),
-      _c("span", { staticClass: "typeOfField" }, [
-        _c("span", {
-          staticClass: "fieldColor rounded-circle",
-          staticStyle: { background: "yellow" }
-        }),
-        _vm._v(" Last minute offer")
+        _vm._v("\n                                    Rezervisano ")
       ])
     ])
   }

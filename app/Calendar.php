@@ -6,9 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Calendar extends Model
 {
-    protected $fillable = ['year', 'month', 'firstDay', 'dates', 'company_id'];
+    /**
+     * @var array
+     */
+    protected $fillable = ['year', 'month', 'firstDay', 'dates', 'company_id', 'free', 'special', 'lastMinute'];
 
 
+    /**
+     * @var array
+     */
     protected $guarded = ['id'];
 
 
@@ -16,15 +22,17 @@ class Calendar extends Model
      * Make period by dates
      *
      * @param $dates
+     * @param $calendarDates
      * @return string
      */
-    public function makePeriod($dates)
+    public function makePeriod($dates, $calendarDates)
     {
         $min = min($dates);
         $max = max($dates);
-        $until = $max > count($dates) ? $max : $max + 1;
 
-        $period = $min.'/'.$this->month.'/'.$this->year .' - '. $until.'/'.$this->month.'/'.$this->year;
+        $until = $max >= $calendarDates ? $max : $max + 1;
+
+        $period = $min . '/' . $this->month . '/' . $this->year . ' - ' . $until . '/' . $this->month . '/' . $this->year;
 
         return $period;
     }

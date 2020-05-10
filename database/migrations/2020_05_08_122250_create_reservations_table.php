@@ -19,6 +19,8 @@ class CreateReservationsTable extends Migration
             $table->string('email');
             $table->string('phone');
             $table->string('period');
+            $table->unsignedInteger('calendar_id');
+            $table->unsignedFloat('price');
             $table->timestamps();
         });
     }

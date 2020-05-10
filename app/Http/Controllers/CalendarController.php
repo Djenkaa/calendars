@@ -16,12 +16,16 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
+
         Calendar::create([
             'year'=>$request->year,
             'month'=>$request->month,
-            'dates'=>json_encode($request->dates,),
+            'dates'=>json_encode($request->dates),
             'firstDay'=>$request->firstDay,
-            'company_id'=>$request->companyId
+            'company_id'=>$request->companyId,
+            'free'=>$request->free,
+            'special'=>$request->special,
+            'lastMinute'=>$request->lastMinute
         ]);
 
         return response()->json('success');
@@ -45,13 +49,17 @@ class CalendarController extends Controller
     public function reserve(Request $request)
     {
         $calendar = Calendar::find($request->calendarId);
-        $period = $calendar->makePeriod($request->dates);
+        $datesNumber = count(json_decode($calendar['dates'],true));
+
+        $period = $calendar->makePeriod($request->dates, $datesNumber);
 
         Reservation::create([
             'fullName'=>$request->fullName,
-            'email'=>'mirko@gmail.com',
+            'email'=>$request->email,
             'phone'=>$request->phone,
-            'period'=>$period
+            'period'=>$period,
+            'calendar_id'=>$request->calendarId,
+            'price'=>$request->price
         ]);
 
        Reservation::make($calendar->id, $request->dates);
@@ -60,10 +68,16 @@ class CalendarController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function price(Request $request)
     {
         $calendar = Calendar::find($request->calendarId);
-        $period = $calendar->makePeriod($request->dates);
+        $datesNumber = count(json_decode($calendar['dates'],true));
+
+        $period = $calendar->makePeriod($request->dates, $datesNumber);
 
         $price = Reservation::price($request->dates, $request->calendarId);
 

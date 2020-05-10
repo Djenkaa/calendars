@@ -21,6 +21,7 @@
                 firstDay: 0,
                 calendarMonth: '',
                 selectAction: '',
+                errors:[],
                 actions: [
                     {
                         type: 'free',
@@ -39,8 +40,6 @@
                         background: 'rgba(255, 224, 71, 0.4)'
                     },
                 ]
-
-
             }
         },
 
@@ -66,7 +65,6 @@
                 }
 
                 if (days) {
-                    // this.daysInMonth = days;
                     this.calendarMonth = this.months[this.selectMonth];
                     this.showCalendar = true;
                     this.firstDay = firstDay;
@@ -99,7 +97,7 @@
             modify(field) {
 
                 if (!this.selectAction) {
-                    console.log('moras izabrati neku akciju!');
+                   this.errors.push('Morate izabrati ponudu');
                     return;
                 }
 
@@ -107,12 +105,9 @@
                     return el.type == this.selectAction;
                 });
 
-
-
                 var searchField = this.daysInMonth.find(el => {
                     return el.field == field;
                 });
-
 
                 searchField.type.status = search.type;
                 searchField.type.background = search.background;
@@ -120,15 +115,27 @@
             },
             save() {
 
+                if(this.freePrice < 1 || this.freePrice == ''){
+                    this.errors.push('Morate staviti cenu za slobodne datume');
+                    return;
+                }
+
                 axios.post('/calendar/store', {
                     year: this.selectYear,
                     month: this.selectMonth,
                     dates: this.daysInMonth,
                     firstDay: this.firstDay,
-                    companyId: this.selectCompany
+                    companyId: this.selectCompany,
+                    free:this.freePrice,
+                    lastMinute:this.lastMinute,
+                    special:this.specialOffer
                 })
                     .then(data => {
-                        location.reload();
+
+                        console.log(data.data);
+                        if(data.data == 'success'){
+                            location.reload();
+                        }
 
                     }).catch(e => {
                     console.log(e);
@@ -154,7 +161,7 @@
         margin-bottom: 10px;
         box-shadow: 0 0 10px #201d1c;
         margin: 0 auto;
-        margin-top: 100px;
+
     }
 
     .jzdcal {
@@ -226,6 +233,17 @@
     .jzdbox .day:hover {
         background: rgba(255, 255, 255, 0.6);
         color: black;
+    }
+
+    #optionList li{
+        list-style: none;
+        margin-top: 10px;
+    }
+
+    .fieldColor {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
     }
 
 </style>

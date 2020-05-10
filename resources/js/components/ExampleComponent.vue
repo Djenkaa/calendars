@@ -53,43 +53,89 @@
                     <!--       TYPE OF FIELD         -->
 
                     <div class="row">
-                        <span class="typeOfField"> <span class="fieldColor rounded-circle"
-                                                         style="background:#749d9e"></span> Free</span>
-                        <span class="typeOfField"><span class="fieldColor rounded-circle" style="background:red"></span> Reserved</span>
-                        <span class="typeOfField"><span class="fieldColor rounded-circle"
-                                                        style="background:blue"></span> Special Offer</span>
-                        <span class="typeOfField"><span class="fieldColor rounded-circle"
-                                                        style="background:yellow"></span> Last minute offer</span>
-                    </div>
 
-                    <!--           CALENDAR         -->
-                    <div class="jzdbox jzdbasf jzdcal">
+                        <div class="col-md-6">
 
-                        <div class="jzdcalt"> {{months[cal.month]}} {{cal.year}}</div>
+                            <ul id="optionList">
 
-                        <span v-for="day in daysInWeek">{{day}}</span>
+                                <li>
+                                    <span class="typeOfField">
+                                        <span class="fieldColor" style="background:rgba(71, 255, 105, 0.4);"></span>
+                                        Dostupno {{cal.free + '€'}}</span>
+                                </li>
+
+                                <li>
+                                    <span class="typeOfField">
+                                        <span class="fieldColor" style="background:rgba(255, 71, 71,0.4);"></span>
+                                        Rezervisano </span>
+
+                                </li>
+
+                                <li>
+                                    <span class="typeOfField">
+                                        <span class="fieldColor" style="background: rgba(71, 227, 255, 0.4);"></span>
+                                        Specijalna ponuda {{cal.special ? cal.special + '€' : ''}}</span>
+                                </li>
+
+                                <li>
+                                    <span class="typeOfField">
+                                        <span class="fieldColor" style="background: rgba(255, 224, 71, 0.4);"></span>
+                                        Last mintue {{cal.lastMinute ? cal.lastMinute + '€' : ''}}</span>
+                                </li>
+
+                            </ul>
+
+                            <!--    BOOKING DETAILS   -->
+                            <div class="bookingDetails" v-if="user.userDates.length >= 3">
+
+                               <p class="priceAndPeriod">{{user.period}}
+                                   <span class="float-right" style="font-size: 18px;">{{user.price}}€</span>
+                               </p>
+
+                                <div class="form-group">
+                                    <label for="fullName">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" v-model="user.fullName">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Telefon</label>
+                                    <input type="text" class="form-control" id="phone" v-model="user.phone">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Email</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="user.email">
+                                </div>
+
+                                <button class="btn btn-primary" @click="sendReservation(cal.id)">Reserve</button>
+                                <button class="btn btn-danger" @click="reset(cal.id)">Reset</button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <!--           CALENDAR         -->
+                            <div class="jzdbox jzdbasf jzdcal">
+
+                                <div class="jzdcalt"> {{months[cal.month]}} {{cal.year}}</div>
+
+                                <span v-for="day in daysInWeek">{{day}}</span>
 
 
-                        <span class="jzdb" v-for="n in cal.firstDay">
-                <!--BLANK--></span>
+                                <span class="jzdb" v-for="n in cal.firstDay">
+                                <!--BLANK--></span>
 
-                        <span class="day" v-for="(date, index) in dates" @click="reserve(date.field, cal.id)"
-                              :style="{background: paintField(index + 1, dates)}">
+                                <span class="day" v-for="(date, index) in dates" @click="reserve(date.field, cal.id)"
+                                      :style="{background: paintField(index + 1, dates)}">
                             {{date.field}}
                         </span>
 
+                            </div>
 
-                    </div>
-                    <br>
+                        </div>
 
-                    <!--          USER DATA          -->
-                    <div v-if="user.userDates.length >= 3">
-                        <p>period: {{user.period}} cena: {{user.price}}$</p>
-                    <input type="text" placeholder="full name" v-model="user.fullName">
-                    <input type="text" placeholder="phone" v-model="user.phone">
-                    <input type="email" placeholder="email" v-model="user.email">
-                    <button class="btn btn-primary" @click="sendReservation(cal.id)">Reserve</button>
-                    <button class="btn btn-danger" @click="reset(cal.id)">Reset</button>
                     </div>
 
                 </div>
@@ -115,9 +161,9 @@
                     userDates: [],
                     fullName: '',
                     phone: '',
-                    email:'',
-                    price:0,
-                    period:''
+                    email: '',
+                    price: 0,
+                    period: ''
                 },
 
             }
@@ -190,18 +236,18 @@
 
                 this.user.userDates.push(field);
 
-                axios.post('/calendar/price',{
-                   dates:this.user.userDates,
+                axios.post('/calendar/price', {
+                    dates: this.user.userDates,
                     calendarId
 
                 })
-                    .then(data=>{
+                    .then(data => {
                         console.log(data.data);
                         this.user.price = data.data.price;
                         this.user.period = data.data.period;
                     })
-                    .catch(e=>{
-                       console.log(e);
+                    .catch(e => {
+                        console.log(e);
                     });
 
             },
@@ -213,7 +259,9 @@
                     calendarId,
                     dates: this.user.userDates,
                     fullName: this.user.fullName,
-                    phone: this.user.phone
+                    email: this.user.email,
+                    phone: this.user.phone,
+                    price: this.user.price
 
                 })
                     .then(data => {
@@ -240,7 +288,7 @@
                 return field.type.background;
             },
 
-            reset(id){
+            reset(id) {
                 this.reservation(id);
                 this.user.userDates = [];
             }
@@ -359,6 +407,17 @@
         display: inline-block;
         width: 20px;
         height: 20px;
+    }
+
+    #optionList li {
+        list-style: none;
+        margin-top: 10px;
+    }
+
+    .priceAndPeriod{
+        padding: 10px;
+        border: 1px solid #eee;
+        box-shadow: 0px 0px 5px #ccc;
     }
 
 </style>

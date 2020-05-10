@@ -20,6 +20,9 @@ class CreateCalendarsTable extends Migration
             $table->json('dates');
             $table->unsignedInteger('firstDay');
             $table->unsignedInteger('company_id');
+            $table->unsignedFloat('free')->default(0);
+            $table->unsignedFloat('lastMinute');
+            $table->unsignedFloat('special');
             $table->timestamps();
         });
     }

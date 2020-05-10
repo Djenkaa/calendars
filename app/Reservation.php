@@ -6,12 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
-    protected $fillable = ['fullName', 'email', 'phone', 'period'];
+    /**
+     * @var array
+     */
+    protected $fillable = ['fullName', 'email', 'phone', 'period', 'calendar_id', 'price'];
 
 
+    /**
+     * @var array
+     */
     protected $guarded = ['id'];
 
 
+    /**
+     * @param $calendarId
+     * @param $dates
+     */
     public static function make($calendarId, $dates)
     {
         $calendar = Calendar::find($calendarId);
