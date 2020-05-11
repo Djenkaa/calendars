@@ -31,8 +31,9 @@ class Calendar extends Model
         $max = max($dates);
 
         $until = $max >= $calendarDates ? $max : $max + 1;
+        $month = $this->month + 1;
 
-        $period = $min . '/' . $this->month . '/' . $this->year . ' - ' . $until . '/' . $this->month . '/' . $this->year;
+        $period = $min . '/' . $month. '/' . $this->year . ' - ' . $until . '/' . $month . '/' . $this->year;
 
         return $period;
     }
