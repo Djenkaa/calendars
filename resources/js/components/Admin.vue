@@ -40,6 +40,10 @@
                         type: 'last',
                         background: 'rgba(255, 224, 71, 0.4)'
                     },
+                    {
+                        type: 'unavailable',
+                        background: 'rgba(255, 136, 0, 0.4)'
+                    },
                 ]
             }
         },

@@ -161,13 +161,18 @@
                                                       style="background: rgba(71, 227, 255, 0.4);"></span>
                                                 <input type="radio" value="special"
                                                        v-model="selectAction"> {{__('appTerms.special')}}
-                                                ponuda
+                                            </li>
+                                            <li><span class="fieldColor"
+                                                      style="background: rgba(255, 136, 0, 0.4)"></span>
+                                                <input type="radio" value="unavailable"
+                                                       v-model="selectAction"> {{__('appTerms.unavailable')}}
                                             </li>
                                             <li style="margin-top: 20px;">
                                                 <button v-if="daysInMonth.length > 0" @click="save"
                                                         class="btn btn-success">{{__('buttons.save')}}
                                                 </button>
                                             </li>
+
 
                                         </ul>
                                         {{--    errors   --}}

@@ -80,8 +80,8 @@
                     return el.field == field
                 });
 
-                console.log(searchDate);
-                if (searchDate.type.status == 'reserved' || searchDate.type.status == 'notAllowed') {
+                if (searchDate.type.status == 'reserved' || searchDate.type.status == 'notAllowed'
+                    || searchDate.type.status == 'unavailable') {
                     return;
                 }
 

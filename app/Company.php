@@ -8,8 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+
+    /**
+     * @var array
+     */
     protected $fillable = ['name', 'image'];
 
+
+    /**
+     * @var array
+     */
     protected $guarded = ['id'];
 
 

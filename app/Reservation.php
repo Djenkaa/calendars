@@ -63,6 +63,11 @@ class Reservation extends Model
     }
 
 
+    /**
+     * @param $dates
+     * @param $calendarId
+     * @return bool
+     */
     public static function freeDates($dates, $calendarId)
     {
         $calendar = Calendar::find($calendarId);
@@ -70,7 +75,7 @@ class Reservation extends Model
 
         foreach ($calendarDates as $date){
 
-            if($date['type']['status'] == 'reserved'){
+            if($date['type']['status'] == 'reserved' || $date['type']['status'] == 'unavailable'){
 
                 if(in_array($date['field'], $dates)){
                     return false;

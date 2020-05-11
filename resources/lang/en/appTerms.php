@@ -6,5 +6,6 @@ return [
     'special' => 'Special Offer',
     'last' => 'Last Minute',
     'reservation' => 'Reservation',
-    'calendar'=>'Calendar'
+    'calendar'=>'Calendar',
+    'unavailable'=>'Unavailable'
 ];

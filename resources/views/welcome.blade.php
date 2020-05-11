@@ -90,6 +90,12 @@
                                         <span class="fieldColor" style="background: rgba(255, 224, 71, 0.4);"></span>
                                         {{__('appTerms.last')}} @{{cal.lastMinute ? cal.lastMinute + '€' : ''}}</span>
                                     </li>
+                                    <li>
+                                    <span class="typeOfField">
+                                        <span class="fieldColor" style="background: rgba(255, 136, 0, 0.4);"></span>
+                                        {{__('appTerms.unavailable')}}
+                                        </span>
+                                    </li>
 
                                 </ul>
 
@@ -168,5 +174,16 @@
     </example-component>
 
 @endsection
+
+
+@section('myJs')
+
+    <script>
+
+
+
+    </script>
+
+    @endsection
 
 

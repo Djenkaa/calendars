@@ -1943,6 +1943,9 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         type: 'last',
         background: 'rgba(255, 224, 71, 0.4)'
+      }, {
+        type: 'unavailable',
+        background: 'rgba(255, 136, 0, 0.4)'
       }]
     };
   },
@@ -2118,9 +2121,8 @@ __webpack_require__.r(__webpack_exports__);
       var searchDate = this.dates.find(function (el) {
         return el.field == field;
       });
-      console.log(searchDate);
 
-      if (searchDate.type.status == 'reserved' || searchDate.type.status == 'notAllowed') {
+      if (searchDate.type.status == 'reserved' || searchDate.type.status == 'notAllowed' || searchDate.type.status == 'unavailable') {
         return;
       }
 
