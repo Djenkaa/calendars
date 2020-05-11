@@ -19,7 +19,7 @@
 
                     <p class="text-muted text-center mt-2">{{__('welcome.nights')}}</p>
                     <!--           CALENDARS             -->
-                    <div class="row flex-nowrap" style="height: 400px; overflow-x:scroll;">
+                    <div class="row flex-nowrap calendarWrap" style="height: 400px; overflow-x:scroll;">
 
                         <div class="col-md-4" v-for="calendar in company.current_year">
 
@@ -168,4 +168,5 @@
     </example-component>
 
 @endsection
+
 

@@ -42,6 +42,7 @@ class CalendarController extends Controller
         }
 
         $req->persist();
+        alert()->success('Success', __('admin.createSuccess'))->toToast();
 
         return response()->json('success');
     }
@@ -74,6 +75,7 @@ class CalendarController extends Controller
         $period = $calendar->makePeriod($request->dates, $datesNumber);
 
         $req->persist($period);
+        alert()->success('Success', __('welcome.reserveSuccess'))->toToast();
 
         return response()->json('success');
     }
