@@ -9,7 +9,7 @@
         data() {
             return {
                 daysInWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-                months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec'],
+                months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Avg', 'Sep', 'Oct', 'Nov', 'Dec'],
                 firms: JSON.parse(this.companies),
                 cal: '',
                 dates: '',
@@ -21,7 +21,7 @@
                     price: 0,
                     period: ''
                 },
-
+                reservationError:''
             }
         },
 
@@ -103,9 +103,10 @@
                         this.user.period = data.data.period;
                     })
                     .catch(e => {
-                        console.log(e);
+
                     });
             },
+
 
             // send reservation
             sendReservation(calendarId) {
@@ -120,9 +121,16 @@
 
                 })
                     .then(data => {
-                        console.log(data.data);
+
+                        if(data.data == 'success'){
+                            location.reload();
+                        }
+
                     }).catch(e => {
-                    console.log(e);
+                        this.reservationError = e.response.data.message;
+                        setTimeout(()=>{
+                            this.reservationError = '';
+                        }, 4000);
                 });
             },
 

@@ -16,6 +16,8 @@
                         {{__('appTerms.calendar')}}
                     </div>
                     <div class="card-body">
+
+
                         <h5 class="card-title">{{__('admin.create')}}</h5>
                         <hr>
 
@@ -25,6 +27,14 @@
                                 inline-template
                         >
                             <div id="admin">
+
+                                {{--   ERROR  --}}
+                                <div v-if="createError" class="alert alert-danger" role="alert">
+                                        @{{ createError }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-md-4">
@@ -72,7 +82,9 @@
 
                                 {{--       MORE OPTIONS     --}}
 
-                                <h6>{{__('admin.dateType')}} <small>({{__('admin.dateTypeAtt')}})</small></h6>
+                                <h6>{{__('admin.dateType')}}
+                                    <small>({{__('admin.dateTypeAtt')}})</small>
+                                </h6>
                                 <hr>
 
                                 <div class="row">
@@ -116,7 +128,8 @@
                                 </div>
 
                                 {{--    Generate calendar   --}}
-                                <button @click="generateCalendar" class="btn btn-primary">{{__('buttons.generate')}}</button>
+                                <button @click="generateCalendar"
+                                        class="btn btn-primary">{{__('buttons.generate')}}</button>
 
                                 {{--       CALENDAR     --}}
 
@@ -128,22 +141,26 @@
 
                                             <li><span class="fieldColor"
                                                       style="background: rgba(71, 255, 105, 0.4);"></span>
-                                                <input type="radio" value="free" v-model="selectAction"> {{__('appTerms.free')}}
+                                                <input type="radio" value="free"
+                                                       v-model="selectAction"> {{__('appTerms.free')}}
                                             </li>
 
                                             <li><span class="fieldColor"
                                                       style="background: rgba(255, 71, 71,0.4);"></span>
-                                                <input type="radio" value="reserved" v-model="selectAction"> {{__('appTerms.reserved')}}
+                                                <input type="radio" value="reserved"
+                                                       v-model="selectAction"> {{__('appTerms.reserved')}}
                                             </li>
 
                                             <li><span class="fieldColor"
                                                       style="background: rgba(255, 224, 71, 0.4);"></span>
-                                                <input type="radio" value="last" v-model="selectAction"> {{__('appTerms.last')}}
+                                                <input type="radio" value="last"
+                                                       v-model="selectAction"> {{__('appTerms.last')}}
                                             </li>
 
                                             <li><span class="fieldColor"
                                                       style="background: rgba(71, 227, 255, 0.4);"></span>
-                                                <input type="radio" value="special" v-model="selectAction"> {{__('appTerms.special')}}
+                                                <input type="radio" value="special"
+                                                       v-model="selectAction"> {{__('appTerms.special')}}
                                                 ponuda
                                             </li>
                                             <li style="margin-top: 20px;">

@@ -100,6 +100,15 @@
                                         <span class="float-right" style="font-size: 18px;">@{{user.price}}€</span>
                                     </p>
 
+                                    {{--    ERROR   --}}
+                                    <div v-if="reservationError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            @{{ reservationError }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+
                                     <div class="form-group">
                                         <label for="fullName">Full Name</label>
                                         <input type="text" class="form-control" id="fullName" v-model="user.fullName">
@@ -116,8 +125,10 @@
                                                aria-describedby="emailHelp" v-model="user.email">
                                     </div>
 
-                                    <button class="btn btn-primary" @click="sendReservation(cal.id)">{{__('buttons.reserve')}}</button>
-                                    <button class="btn btn-danger" @click="reset(cal.id)">{{__('buttons.restart')}}</button>
+                                    <button class="btn btn-primary"
+                                            @click="sendReservation(cal.id)">{{__('buttons.reserve')}}</button>
+                                    <button class="btn btn-danger"
+                                            @click="reset(cal.id)">{{__('buttons.restart')}}</button>
 
                                 </div>
 

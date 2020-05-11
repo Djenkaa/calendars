@@ -1917,7 +1917,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       daysInWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec'],
+      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Avg', 'Sep', 'Oct', 'Nov', 'Dec'],
       selectCompany: 2,
       selectYear: new Date().getFullYear(),
       selectMonth: new Date().getMonth(),
@@ -1930,6 +1930,7 @@ __webpack_require__.r(__webpack_exports__);
       calendarMonth: '',
       selectAction: '',
       errors: [],
+      createError: '',
       actions: [{
         type: 'free',
         background: 'rgba(71, 255, 105, 0.4)'
@@ -2007,6 +2008,8 @@ __webpack_require__.r(__webpack_exports__);
       searchField.type.price = this.setPrice(search);
     },
     save: function save() {
+      var _this2 = this;
+
       if (this.freePrice < 1 || this.freePrice == '') {
         this.errors.push('You have to fill free field');
         return;
@@ -2022,13 +2025,16 @@ __webpack_require__.r(__webpack_exports__);
         lastMinute: this.lastMinute,
         special: this.specialOffer
       }).then(function (data) {
-        console.log(data.data);
-
         if (data.data == 'success') {
           location.reload();
+        } else if (data.data.error) {
+          _this2.errors.push(data.data.error);
         }
       })["catch"](function (e) {
-        console.log(e);
+        _this2.createError = e.response.data.message;
+        setTimeout(function () {
+          _this2.createError = '';
+        }, 4000);
       });
     }
   }
@@ -2053,7 +2059,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       daysInWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec'],
+      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Avg', 'Sep', 'Oct', 'Nov', 'Dec'],
       firms: JSON.parse(this.companies),
       cal: '',
       dates: '',
@@ -2064,7 +2070,8 @@ __webpack_require__.r(__webpack_exports__);
         email: '',
         price: 0,
         period: ''
-      }
+      },
+      reservationError: ''
     };
   },
   props: ['companies'],
@@ -2128,12 +2135,12 @@ __webpack_require__.r(__webpack_exports__);
         console.log(data.data);
         _this2.user.price = data.data.price;
         _this2.user.period = data.data.period;
-      })["catch"](function (e) {
-        console.log(e);
-      });
+      })["catch"](function (e) {});
     },
     // send reservation
     sendReservation: function sendReservation(calendarId) {
+      var _this3 = this;
+
       axios.post('/calendar/reserve', {
         calendarId: calendarId,
         dates: this.user.userDates,
@@ -2142,9 +2149,14 @@ __webpack_require__.r(__webpack_exports__);
         phone: this.user.phone,
         price: this.user.price
       }).then(function (data) {
-        console.log(data.data);
+        if (data.data == 'success') {
+          location.reload();
+        }
       })["catch"](function (e) {
-        console.log(e);
+        _this3.reservationError = e.response.data.message;
+        setTimeout(function () {
+          _this3.reservationError = '';
+        }, 4000);
       });
     },
     // field background

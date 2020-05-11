@@ -9,19 +9,20 @@
         data() {
             return {
                 daysInWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-                months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Avg', 'Sep', 'Okt', 'Nov', 'Dec'],
+                months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Avg', 'Sep', 'Oct', 'Nov', 'Dec'],
                 selectCompany: 2,
                 selectYear: new Date().getFullYear(),
                 selectMonth: new Date().getMonth(),
                 lastMinute: 0,
                 specialOffer: 0,
-                freePrice:0,
+                freePrice: 0,
                 showCalendar: false,
                 daysInMonth: [],
                 firstDay: 0,
                 calendarMonth: '',
                 selectAction: '',
-                errors:[],
+                errors: [],
+                createError: '',
                 actions: [
                     {
                         type: 'free',
@@ -57,7 +58,7 @@
                         type: {
                             status: 'free',
                             background: 'rgba(71, 255, 105,0.4)',
-                            price:this.freePrice
+                            price: this.freePrice
 
                         }
                     };
@@ -73,7 +74,7 @@
 
             },
 
-            setPrice(action){
+            setPrice(action) {
 
                 var price = 0;
 
@@ -97,7 +98,7 @@
             modify(field) {
 
                 if (!this.selectAction) {
-                   this.errors.push('You have to select some date type');
+                    this.errors.push('You have to select some date type');
                     return;
                 }
 
@@ -115,7 +116,7 @@
             },
             save() {
 
-                if(this.freePrice < 1 || this.freePrice == ''){
+                if (this.freePrice < 1 || this.freePrice == '') {
                     this.errors.push('You have to fill free field');
                     return;
                 }
@@ -126,19 +127,24 @@
                     dates: this.daysInMonth,
                     firstDay: this.firstDay,
                     companyId: this.selectCompany,
-                    free:this.freePrice,
-                    lastMinute:this.lastMinute,
-                    special:this.specialOffer
+                    free: this.freePrice,
+                    lastMinute: this.lastMinute,
+                    special: this.specialOffer
                 })
                     .then(data => {
 
-                        console.log(data.data);
-                        if(data.data == 'success'){
+                        if (data.data == 'success') {
                             location.reload();
+                        } else if (data.data.error) {
+                            this.errors.push(data.data.error);
                         }
 
                     }).catch(e => {
-                    console.log(e);
+
+                    this.createError = e.response.data.message;
+                    setTimeout(() => {
+                        this.createError = '';
+                    }, 4000);
                 });
             }
         }

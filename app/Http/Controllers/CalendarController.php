@@ -38,7 +38,7 @@ class CalendarController extends Controller
         $calendar = $this->calendarRepository->exist($request->year, $request->month, $request->companyId);
 
         if ($calendar) {
-            return \response()->json(['error' => 'Vec ste kreirali kalendar za taj mesec']);
+            return \response()->json(['error' => __('admin.createError')]);
         }
 
         $req->persist();
@@ -68,7 +68,7 @@ class CalendarController extends Controller
 
         if (!Reservation::freeDates($request->dates, $calendar->id)) {
 
-            return \response()->json(['error' => 'Izabrali ste datume koju su zauzeti!']);
+            return \response()->json(['error' => __('welcome.reserveError')]);
         }
         $datesNumber = count(json_decode($calendar['dates'], true));
         $period = $calendar->makePeriod($request->dates, $datesNumber);
