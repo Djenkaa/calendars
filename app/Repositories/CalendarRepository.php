@@ -1,13 +1,14 @@
 <?php
 
 
-namespace App\repositories;
+namespace App\Repositories;
 
 
 use App\Calendar;
+use App\Repositories\Interfaces\CalendarRepositoryInterface;
 use App\Reservation;
 
-class CalendarRepository
+class CalendarRepository implements CalendarRepositoryInterface
 {
 
 

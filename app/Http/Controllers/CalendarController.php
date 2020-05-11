@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Calendar;
 use App\Http\Requests\CalendarRequest;
 use App\Http\Requests\ReservationRequest;
-use App\repositories\CalendarRepository;
+use App\Repositories\CalendarRepository;
+use App\Repositories\Interfaces\CalendarRepositoryInterface;
 use App\Reservation;
 use http\Env\Response;
 use Illuminate\Http\Request;
@@ -14,16 +15,16 @@ class CalendarController extends Controller
 {
 
     /**
-     * @var CalendarRepository
+     * @var CalendarRepositoryInterface
      */
     private $calendarRepository;
 
 
     /**
      * CalendarController constructor.
-     * @param CalendarRepository $calendarRepository
+     * @param CalendarRepositoryInterface $calendarRepository
      */
-    public function __construct(CalendarRepository $calendarRepository)
+    public function __construct(CalendarRepositoryInterface $calendarRepository)
     {
         $this->calendarRepository = $calendarRepository;
     }

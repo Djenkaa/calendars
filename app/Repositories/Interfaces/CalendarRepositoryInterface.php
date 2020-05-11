@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\repositories\interfaces;
+namespace App\Repositories\Interfaces;
 
 
 interface CalendarRepositoryInterface

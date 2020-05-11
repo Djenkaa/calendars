@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\repositories\CalendarRepository;
-use App\repositories\interfaces\CalendarRepositoryInterface;
+use App\Repositories\CalendarRepository;
+use App\Repositories\Interfaces\CalendarRepositoryInterface;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 

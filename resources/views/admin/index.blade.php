@@ -14,6 +14,7 @@
                 <div class="card">
                     <div class="card-header">
                         {{__('appTerms.calendar')}}
+                        <a href="{{route('welcome')}}" class="float-right">Home</a>
                     </div>
                     <div class="card-body">
 

@@ -18,7 +18,7 @@ class CompanyController extends Controller
     {
         $companies = Company::all();
 
-        return view('company.index', compact('companies'));
+        return view('admin.index', compact('companies'));
     }
 
 
