@@ -51,6 +51,11 @@
         methods: {
             generateCalendar() {
 
+                if (this.freePrice < 1 || !this.freePrice) {
+                    this.createError='You have to fill free field';
+                    return;
+                }
+
                 var days = 32 - (new Date(this.selectYear, this.selectMonth, 32).getDate());
                 var firstDay = new Date(this.selectYear, this.selectMonth).getDay();
 
@@ -68,14 +73,11 @@
                     };
                     this.daysInMonth.push(date);
                 }
-
                 if (days) {
                     this.calendarMonth = this.months[this.selectMonth];
                     this.showCalendar = true;
                     this.firstDay = firstDay;
-
                 }
-
             },
 
             setPrice(action) {
@@ -119,11 +121,6 @@
                 searchField.type.price = this.setPrice(search);
             },
             save() {
-
-                if (this.freePrice < 1 || this.freePrice == '') {
-                    this.errors.push('You have to fill free field');
-                    return;
-                }
 
                 axios.post('/calendar/store', {
                     year: this.selectYear,

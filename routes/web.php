@@ -15,13 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', 'CompanyController@welcome')->name('company.welcome');
-
-Route::get('/admin','CompanyController@index')->name('company.index');
-
-
-
-
-
+Route::get('/admin','CompanyController@index')->name('admin.index');
 
 
 Route::prefix('calendar')->group(function () {

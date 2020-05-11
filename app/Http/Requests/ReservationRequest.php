@@ -29,7 +29,7 @@ class ReservationRequest extends FormRequest
             'email'=>'required|email',
             'phone'=>'required',
             'calendarId'=>'required|integer',
-            'price'=>'required|integer'
+            'price'=>'required|numeric'
         ];
     }
 

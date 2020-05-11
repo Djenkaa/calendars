@@ -30,9 +30,9 @@ class CalendarRequest extends FormRequest
             'dates'=>'required',
             'firstDay'=>'required|integer',
             'companyId'=>'required|integer',
-            'free'=>'required|integer',
-            'special'=>'integer',
-            'lastMinute'=>'integer'
+            'free'=>'required|numeric',
+            'special'=>'numeric',
+            'lastMinute'=>'numeric'
         ];
     }
 

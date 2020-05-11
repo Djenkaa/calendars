@@ -7,5 +7,5 @@ return [
     'last' => 'Last Minute',
     'reservation' => 'Reservation',
     'calendar'=>'Calendar',
-    'unavailable'=>'Unavailable'
+    'unavailable'=>'Unavailable',
 ];

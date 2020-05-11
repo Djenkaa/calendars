@@ -3,12 +3,20 @@
 
 @section('content')
 
-    <example-component
+    <welcome
             companies="{{$companies}}"
             inline-template
     >
 
         <div class="container" v-cloak>
+
+            <div class="row text-center mt-3">
+               <div class="col-md-12 text-center mt-3">
+                   <a href="{{route('admin.index')}}">
+                   <button class="btn btn-info">{{__('buttons.generate')}} {{__('appTerms.calendar')}}</button>
+                   </a>
+               </div>
+            </div>
 
             <div class="row mt-5 card" v-for="company in firms">
 
@@ -171,7 +179,7 @@
         </div>
 
 
-    </example-component>
+    </welcome>
 
 @endsection
 

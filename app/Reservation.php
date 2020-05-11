@@ -56,7 +56,7 @@ class Reservation extends Model
 
             if(in_array($date['field'], $dates)){
 
-               $price+= (int) $date['type']['price'];
+               $price+= (float) $date['type']['price'];
             }
         }
         return $price;

@@ -98,8 +98,8 @@
 
                 })
                     .then(data => {
-                        console.log(data.data);
-                        this.user.price = data.data.price;
+
+                        this.user.price = data.data.price.toFixed(2);
                         this.user.period = data.data.period;
                     })
                     .catch(e => {
