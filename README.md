@@ -10,7 +10,8 @@
 2. npm install
 3. cp .env.example .env
 4. configure the env file
-5. php artisan config:cache
-6. php artisan migrate --seed
-7. php artisan serve
+5. php artisan key:generate 
+6. php artisan config:cache
+7. php artisan migrate --seed
+8. php artisan serve
 
