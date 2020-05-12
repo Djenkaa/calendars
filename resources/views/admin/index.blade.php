@@ -94,11 +94,12 @@
 
                                         {{--        Normal      --}}
                                         <div class="form-group">
-                                            <label for="normalPrice">{{__('appTerms.free')}}</label>
+                                            <label for="normalPrice">{{__('appTerms.free')}} <small> ({{__('admin.required')}})</small></label>
                                             <input type="text" class="form-control" id="normalPrice"
                                                    aria-describedby="emailHelp"
                                                    v-model="freePrice">
                                         </div>
+
 
                                     </div>
 
@@ -177,7 +178,7 @@
 
                                         </ul>
                                         {{--    errors   --}}
-                                        <div v-for="error in errors" class="alert alert-danger" role="alert">
+                                        <div v-if="error" class="alert alert-danger" role="alert">
                                             @{{ error }}
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>

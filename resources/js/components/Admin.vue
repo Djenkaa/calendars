@@ -9,7 +9,7 @@
         data() {
             return {
                 daysInWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-                months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Avg', 'Sep', 'Oct', 'Nov', 'Dec'],
+                months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 selectCompany: 2,
                 selectYear: new Date().getFullYear(),
                 selectMonth: new Date().getMonth(),
@@ -21,7 +21,7 @@
                 firstDay: 0,
                 calendarMonth: '',
                 selectAction: '',
-                errors: [],
+                error: '',
                 createError: '',
                 actions: [
                     {
@@ -104,7 +104,7 @@
             modify(field) {
 
                 if (!this.selectAction) {
-                    this.errors.push('You have to select some date type');
+                    this.error='You have to select some date type';
                     return;
                 }
 
@@ -137,7 +137,7 @@
                         if (data.data == 'success') {
                             location.reload();
                         } else if (data.data.error) {
-                            this.errors.push(data.data.error);
+                            this.error=data.data.error;
                         }
 
                     }).catch(e => {

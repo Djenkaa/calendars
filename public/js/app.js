@@ -1929,7 +1929,7 @@ __webpack_require__.r(__webpack_exports__);
       firstDay: 0,
       calendarMonth: '',
       selectAction: '',
-      errors: [],
+      error: '',
       createError: '',
       actions: [{
         type: 'free',
@@ -2001,7 +2001,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (!this.selectAction) {
-        this.errors.push('You have to select some date type');
+        this.error = 'You have to select some date type';
         return;
       }
 
@@ -2031,7 +2031,7 @@ __webpack_require__.r(__webpack_exports__);
         if (data.data == 'success') {
           location.reload();
         } else if (data.data.error) {
-          _this2.errors.push(data.data.error);
+          _this2.error = data.data.error;
         }
       })["catch"](function (e) {
         _this2.createError = e.response.data.message;
